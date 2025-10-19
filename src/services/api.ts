@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { InternalAxiosRequestConfig } from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'https://lamaja-backend.onrender.com/api',
+    baseURL: 'http://localhost:3001/api',
 });
 
 apiClient.interceptors.request.use(

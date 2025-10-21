@@ -57,14 +57,17 @@ const Register: React.FC = () => {
 </h1>
 
       </header>
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: "url('/hermosa-naturaleza-retro-con-campo.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+    <div
+  className="fixed inset-0 z-0 w-full h-full"
+  style={{
+    backgroundImage: "url('/hermosa-naturaleza-retro-con-campo.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}
+></div>
+
+
 
       {/* Registration Form */}
       <div className="flex-1 flex items-center justify-center w-full relative z-10 py-8">

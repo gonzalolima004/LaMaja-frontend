@@ -18,6 +18,10 @@ const Header = () => {
   const goGenerarPresupuestos = () => {
     navigate('/presupuestos/generar');
   };
+  const goGenerarFacturas = () => {
+  navigate("/generar-factura");
+};
+
 
   return (
     <header className="bg-[#F3EBD8] border-b-2 border-[#345A35] w-full">
@@ -63,6 +67,16 @@ const Header = () => {
         >
           <BookText className="w-5 h-5 text-white" />
           <span className="hidden sm:inline font-medium text-sm text-white">Generar Presupuestos</span>
+        </button>
+      )}
+       {/* Botón flotante de facturas */}
+      {location.pathname === '/facturas' && (
+        <button
+          onClick={goGenerarFacturas}
+          className="cursor-pointer fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-3 rounded-full bg-[#A1C084] text-[#345A35] shadow-lg hover:bg-[#345A35] hover:text-[#F3EBD8] transition-colors text-sm"
+        >
+          <BookText className="w-5 h-5 text-white" />
+          <span className="hidden sm:inline font-medium text-sm text-white">Generar Facturas</span>
         </button>
       )}
     </header>

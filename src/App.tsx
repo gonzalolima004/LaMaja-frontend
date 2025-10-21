@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import VerificadorToken from './services/VerificadorToken'
 import Presupuestos from './pages/Presupuestos'
 import GenerarPresupuestos from './pages/GenerarPresupuestos'
+import Ventas from './pages/Ventas'
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/presupuestos" element={<Presupuestos />} />
           <Route path="/presupuestos/generar" element={<GenerarPresupuestos />} />
+          <Route path="/ventas" element={<Ventas />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" />} />

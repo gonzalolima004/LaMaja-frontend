@@ -37,70 +37,77 @@ const Login: React.FC = () => {
     }
   };
 
-  return (
-  <div className="min-h-screen bg-[#F3EBD8] flex flex-col items-center justify-center">
-  
-    <header className="w-full flex items-center justify-between px-6 py-4 bg-[#345A35] mb-6 relative">
-        <img src="/logo.png" alt="Logo La Maja" className="w-16 h-16" />
-        <h1 className="absolute left-1/2 transform -translate-x-1/2 text-4xl font-bold text-[#F3EBD8]">
-            LA MAJA
-        </h1>
-    </header>
+ return (
+    <div className="min-h-screen bg-[#F3EBD8] flex flex-col">
+      <header className="w-full flex items-center px-8 py-4 bg-[#345A35]">
+        <img
+          src="/logo-sin-letras.png"
+          alt="Logo La Maja"
+          className="w-20 h-20 rounded-full bg-transparent"
+        />
+        <h1 className="flex-1 text-center ml-[-70px] text-5xl font-serif font-bold text-[#F3EBD8] tracking-wider">
+  LA MAJA
+</h1>
 
+      </header>
 
-    {/* Contenedor del login */}
-    <form
-      onSubmit={handleLogin}
-      className="bg-[#A1C084] w-80 rounded-2xl shadow-md flex flex-col items-center py-6 px-6 space-y-3"
-    >
-      <h2 className="text-lg font-semibold text-[#345A35] mb-2">Login</h2>
-
-      <input
-        type="email"
-        placeholder="Email"
-        className="w-full p-2 rounded-md border border-[#345A35] focus:outline-none"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <input
-        type="password"
-        placeholder="Contraseña"
-        className="w-full p-2 rounded-md border border-[#345A35] focus:outline-none"
-        value={contrasena}
-        onChange={(e) => setContrasena(e.target.value)}
-      />
-
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-[#345A35] text-[#F3EBD8] rounded-md py-2 mt-3 hover:bg-[#2c4b2b] transition-colors"
+      <div
+        className="flex-1 flex justify-center items-start pt-10 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('public/vista-frontal-del-paisaje-con-vegetacion-y-cielo-despejado.jpg')",
+        }}
       >
-        {loading ? "Ingresando..." : "Ingresar"}
-      </button>
+        <form
+          onSubmit={handleLogin}
+          className="bg-[#A1C084]/90 backdrop-blur-sm w-full max-w-md rounded-3xl shadow-2xl flex flex-col items-center py-8 px-10 space-y-4"
+        >
+          <h2 className="text-3xl font-semibold text-[#F3EBD8] mb-4">login</h2>
 
-      <div className="w-full border-t border-[#345A35] my-3"></div>
+          <input
+            type="email"
+            placeholder="Email:"
+            className="w-full p-4 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/70 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-      <button
-        type="button"
-        onClick={() => navigate("/register")}
-        className="w-full bg-[#F3EBD8] text-[#345A35] rounded-md py-2 hover:bg-[#e9dfc5] transition-colors"
-      >
-        Registrar
-      </button>
+          <input
+            type="password"
+            placeholder="Contraseña:"
+            className="w-full p-4 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/70 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+          />
 
-      <button
-        type="button"
-        onClick={() =>
-          Swal.fire("Recuperar contraseña", "Funcionalidad próximamente disponible.", "info")
-        }
-        className="w-full bg-[#F3EBD8] text-[#345A35] rounded-md py-2 hover:bg-[#e9dfc5] transition-colors"
-      >
-        Olvidé la contraseña
-      </button>
-    </form>
-  </div>
-);
+          <button
+            type="submit"
+            disabled={loading}
+            className="cursor-pointer w-3/4 bg-[#F3EBD8] text-[#345A35] rounded-full py-3 mt-4 font-semibold text-lg hover:bg-[#e9dfc5] transition-colors disabled:opacity-50"
+          >
+            {loading ? "Ingresando..." : "Ingresar"}
+          </button>
+
+          <div className="w-full border-t-2 border-[#345A35]/30 my-4"></div>
+
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            className="cursor-pointer w-3/4 bg-[#F3EBD8] text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#e9dfc5] transition-colors"
+          >
+            Registrar
+          </button>
+
+          <button
+            type="button"
+            onClick={() => Swal.fire("Recuperar contraseña", "Funcionalidad próximamente disponible.", "info")}
+            className="cursor-pointer w-3/4 bg-[#F3EBD8] text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#e9dfc5] transition-colors"
+          >
+            Olvidé la contraseña
+          </button>
+        </form>
+      </div>
+    </div>
+  )
 
 };
 

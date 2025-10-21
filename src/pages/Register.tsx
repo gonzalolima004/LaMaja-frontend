@@ -45,78 +45,102 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3EBD8] flex flex-col items-center justify-center">
-      {/* Header */}
-      <header className="w-full flex items-center justify-between px-6 py-4 bg-[#345A35] mb-6 relative">
-        <img src="/logo.png" alt="Logo La Maja" className="w-16 h-16" />
-        <h1 className="absolute left-1/2 transform -translate-x-1/2 text-4xl font-bold text-[#F3EBD8]">
-          LA MAJA
-        </h1>
+    <div className="min-h-screen bg-[#F3EBD8] flex flex-col">
+      <header className="w-full flex items-center px-8 py-4 bg-[#345A35] z-10">
+        <img
+          src="/logo-sin-letras.png"
+          alt="Logo La Maja"
+          className="w-20 h-20 rounded-full bg-transparent"
+        />
+        <h1 className="flex-1 text-center ml-[-70px] text-5xl font-serif font-bold text-[#F3EBD8] tracking-wider">
+  LA MAJA
+</h1>
+
       </header>
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('/hermosa-naturaleza-retro-con-campo.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
 
-      {/* Formulario de registro */}
-      <form
-        onSubmit={handleRegister}
-        className="bg-[#A1C084] w-96 rounded-2xl shadow-md flex flex-col items-center py-6 px-6 space-y-3"
-      >
-        <h2 className="text-lg font-semibold text-[#345A35] mb-2">Registro</h2>
-
-        <input
-          type="text"
-          placeholder="Nombre"
-          className="w-full p-2 rounded-md border border-[#345A35] focus:outline-none"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Apellido"
-          className="w-full p-2 rounded-md border border-[#345A35] focus:outline-none"
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="DNI"
-          className="w-full p-2 rounded-md border border-[#345A35] focus:outline-none"
-          value={dni}
-          onChange={(e) => setDni(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-2 rounded-md border border-[#345A35] focus:outline-none"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          className="w-full p-2 rounded-md border border-[#345A35] focus:outline-none"
-          value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
-        />
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-[#345A35] text-[#F3EBD8] rounded-md py-2 mt-3 hover:bg-[#2c4b2b] transition-colors"
+      {/* Registration Form */}
+      <div className="flex-1 flex items-center justify-center w-full relative z-10 py-8">
+        <form
+          onSubmit={handleRegister}
+          className="bg-[#A1C084]/90 backdrop-blur-sm w-full max-w-md rounded-3xl shadow-2xl flex flex-col items-center py-8 px-8 space-y-4 mx-4"
         >
-          {loading ? "Registrando..." : "Registrar"}
-        </button>
+          <h2 className="text-2xl font-semibold text-[#F3EBD8] mb-2">Registro</h2>
 
-        <div className="w-full border-t border-[#345A35] my-3"></div>
+          <input
+            type="text"
+            placeholder="Nombre"
+            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            required
+          />
 
-        <button
-          type="button"
-          onClick={() => navigate("/")}
-          className="w-full bg-[#F3EBD8] text-[#345A35] rounded-md py-2 hover:bg-[#e9dfc5] transition-colors"
-        >
-          Volver al Login
-        </button>
-      </form>
+          <input
+            type="text"
+            placeholder="Apellido"
+            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="DNI"
+            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            value={dni}
+            onChange={(e) => setDni(e.target.value)}
+            required
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Contraseña"
+            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+            required
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="cursor-pointer w-full bg-[#F3EBD8] text-[#345A35] rounded-full py-3 mt-4 font-semibold hover:bg-[#e9dfc5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Registrando..." : "Registrar"}
+          </button>
+
+          <div className="w-full border-t border-[#F3EBD8]/50 my-2"></div>
+
+           <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="w-full bg-[#F3EBD8] text-[#345A35] rounded-full py-3 font-semibold hover:bg-[#e9dfc5] transition-colors cursor-pointer "
+                >
+                Volver al Login
+            </button>
+
+        </form>
+      </div>
     </div>
-  );
+  )
 };
 
 export default Register;

@@ -19,7 +19,7 @@ const Header = () => {
     navigate('/presupuestos/generar');
   };
   const goGenerarFacturas = () => {
-  navigate("/generar-factura");
+  navigate('/facturas/generar');
 };
 
 

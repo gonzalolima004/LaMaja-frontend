@@ -6,6 +6,7 @@ import VerificadorToken from './services/VerificadorToken'
 import Presupuestos from './pages/Presupuestos'
 import GenerarPresupuestos from './pages/GenerarPresupuestos'
 import Facturas from './pages/Facturas'
+import GenerarFacturas from './pages/GenerarFactura'
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
           <Route path="/presupuestos" element={<Presupuestos />} />
           <Route path="/presupuestos/generar" element={<GenerarPresupuestos />} />
           <Route path="/facturas" element={<Facturas />} />
+          <Route path="/facturas/generar" element={<GenerarFacturas />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" />} />

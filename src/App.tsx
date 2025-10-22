@@ -1,12 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import RestablecerContraseña from "./pages/RestablecerContraseña";
 import Home from './pages/Home'
 import VerificadorToken from './services/VerificadorToken'
 import Presupuestos from './pages/Presupuestos'
 import GenerarPresupuestos from './pages/GenerarPresupuestos'
 import Facturas from './pages/Facturas'
 import GenerarFacturas from './pages/GenerarFactura'
+
 
 const App: React.FC = () => {
   return (
@@ -15,6 +17,7 @@ const App: React.FC = () => {
         {/* rutas públicas */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/restablecer/:token" element={<RestablecerContraseña />} />
 
         {/* rutas protegidas */}
         <Route element={<VerificadorToken />}>

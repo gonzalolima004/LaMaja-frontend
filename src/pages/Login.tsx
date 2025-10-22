@@ -7,12 +7,12 @@ const Login: React.FC = () => {
   const [email, setEmail] = React.useState<string>("");
   const [contrasena, setContrasena] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [showModal, setShowModal] = React.useState<boolean>(false);
-  const [recoveryEmail, setRecoveryEmail] = React.useState<string>("");
+  const [mostrarModal, setMostrarModal] = React.useState<boolean>(false);
+  const [emailRecuperacion, setEmailRecuperacion] = React.useState<string>("");
 
   const navigate = useNavigate();
 
-  // === LOGIN ===
+  // --- LOGIN NORMAL ---
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -40,36 +40,32 @@ const Login: React.FC = () => {
     }
   };
 
-  // === RECUPERAR CONTRASEÑA ===
-  const handlePasswordRecovery = async () => {
-    if (!recoveryEmail) {
-      Swal.fire("Campo vacío", "Por favor ingresa tu email.", "warning");
+  // --- ENVIAR CORREO DE RECUPERACIÓN ---
+  const handleRecuperarContrasena = async () => {
+    if (!emailRecuperacion) {
+      Swal.fire("Campo vacío", "Por favor, ingresa tu email.", "warning");
       return;
     }
 
     try {
-      setLoading(true);
-      const response = await api.post("/usuarios/recuperar-contrasena", { email: recoveryEmail });
-
+      await api.post("/usuarios/recuperar", { email: emailRecuperacion });
       Swal.fire(
         "Correo enviado",
-        "Te hemos enviado un enlace para restablecer tu contraseña. Revisa tu bandeja de entrada.",
+        "Si el email existe en nuestra base de datos, recibirás un mensaje con instrucciones para restablecer tu contraseña.",
         "success"
       );
-      setShowModal(false);
-      setRecoveryEmail("");
+      setMostrarModal(false);
+      setEmailRecuperacion("");
     } catch (err: any) {
-      console.error("Error al enviar correo:", err);
-      const mensaje = err.response?.data?.error || "No se pudo enviar el correo. Inténtalo más tarde.";
+      console.error("Error en recuperación:", err);
+      const mensaje = err.response?.data?.error || "No se pudo enviar el correo de recuperación.";
       Swal.fire("Error", mensaje, "error");
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#F3EBD8] flex flex-col">
-      {/* HEADER */}
+      {/* Header */}
       <header className="w-full flex items-center px-8 py-4 bg-[#345A35]">
         <img
           src="/logo-sin-letras.png"
@@ -81,11 +77,12 @@ const Login: React.FC = () => {
         </h1>
       </header>
 
-      {/* FORMULARIO LOGIN */}
+      {/* Login */}
       <div
         className="flex-1 flex justify-center items-start pt-10 bg-cover bg-center"
         style={{
-          backgroundImage: "url('public/vista-frontal-del-paisaje-con-vegetacion-y-cielo-despejado.jpg')",
+          backgroundImage:
+            "url('public/vista-frontal-del-paisaje-con-vegetacion-y-cielo-despejado.jpg')",
         }}
       >
         <form
@@ -130,7 +127,7 @@ const Login: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => setShowModal(true)}
+            onClick={() => setMostrarModal(true)}
             className="italic cursor-pointer w-3/4 bg-[#345A35] text-[#F3EBD8] hover:text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#F3EBD8] transition-colors"
           >
             Olvidé la contraseña
@@ -138,38 +135,32 @@ const Login: React.FC = () => {
         </form>
       </div>
 
-      {/* MODAL DE RECUPERAR CONTRASEÑA */}
-      {showModal && (
-        <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-[#F3EBD8] p-8 rounded-3xl shadow-2xl w-96 flex flex-col gap-4">
-            <h3 className="text-2xl font-semibold text-[#345A35] text-center mb-2">
+      {/* Modal de recuperación */}
+      {mostrarModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-[#F3EBD8] rounded-2xl shadow-lg p-8 w-96 text-center">
+            <h2 className="text-2xl font-semibold text-[#345A35] mb-4">
               Recuperar contraseña
-            </h3>
-            <p className="text-[#345A35] text-sm text-center">
-              Ingresá tu email y te enviaremos un enlace para restablecer tu contraseña.
-            </p>
-
+            </h2>
             <input
               type="email"
-              placeholder="Tu email"
-              value={recoveryEmail}
-              onChange={(e) => setRecoveryEmail(e.target.value)}
-              className="p-3 rounded-full bg-white text-[#345A35] border border-[#345A35]/40 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+              placeholder="Ingresa tu email"
+              value={emailRecuperacion}
+              onChange={(e) => setEmailRecuperacion(e.target.value)}
+              className="w-full p-3 rounded-full border border-[#345A35] mb-4 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
             />
-
-            <div className="flex justify-between mt-4">
+            <div className="flex justify-around">
               <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 rounded-full bg-gray-400 text-white font-semibold hover:bg-gray-500 transition-colors"
+                onClick={handleRecuperarContrasena}
+                className="bg-[#345A35] text-[#F3EBD8] px-4 py-2 rounded-full hover:bg-[#4C704D] transition-colors"
               >
-                Cancelar
+                Enviar
               </button>
               <button
-                onClick={handlePasswordRecovery}
-                disabled={loading}
-                className="px-4 py-2 rounded-full bg-[#345A35] text-[#F3EBD8] font-semibold hover:bg-[#A1C084] hover:text-[#345A35] transition-colors"
+                onClick={() => setMostrarModal(false)}
+                className="bg-[#A1C084] text-[#345A35] px-4 py-2 rounded-full hover:bg-[#B6D69C] transition-colors"
               >
-                {loading ? "Enviando..." : "Enviar"}
+                Cancelar
               </button>
             </div>
           </div>

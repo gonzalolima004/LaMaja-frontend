@@ -75,7 +75,7 @@ const Register: React.FC = () => {
           onSubmit={handleRegister}
           className="bg-[#A1C084]/90 backdrop-blur-sm w-full max-w-md rounded-3xl shadow-2xl flex flex-col items-center py-8 px-8 space-y-4 mx-4"
         >
-          <h2 className="text-2xl font-semibold text-[#F3EBD8] mb-2">Registro</h2>
+          <h2 className="text-2xl font-semibold text-[#F3EBD8] mb-2 italic">Registro</h2>
 
           <input
             type="text"
@@ -125,7 +125,7 @@ const Register: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="cursor-pointer w-full bg-[#F3EBD8] text-[#345A35] rounded-full py-3 mt-4 font-semibold hover:bg-[#e9dfc5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cursor-pointer w-full bg-[#F3EBD8] text-[#345A35] rounded-full py-3 mt-4 font-semibold hover:bg-[#345A35] hover:text-[#F3EBD8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Registrando..." : "Registrar"}
           </button>
@@ -135,9 +135,9 @@ const Register: React.FC = () => {
            <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="w-full bg-[#F3EBD8] text-[#345A35] rounded-full py-3 font-semibold hover:bg-[#e9dfc5] transition-colors cursor-pointer "
+                className="italic cursor-pointer w-3/4 bg-[#345A35] text-[#F3EBD8] hover:text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#F3EBD8] transition-colors"
                 >
-                Volver al Login
+                Volver al inicio de sesión
             </button>
 
         </form>

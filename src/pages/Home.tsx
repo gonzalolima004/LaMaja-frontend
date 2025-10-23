@@ -30,7 +30,7 @@ const Home: React.FC = () => {
           </h2>
         </Link>
 
-        <Link to="/ventas"
+        <Link to="/facturas"
           className="flex flex-col items-center justify-center bg-[#A1C084] border-2 border-[#345A35] rounded-lg p-6 md:p-12 min-h-[180px] md:min-h-[220px] hover:bg-[#345A35] hover:text-[#F3EBD8] transition-all group">
 
           <ShoppingCart className="w-12 h-12 md:w-16 md:h-16 text-[#345A35] mb-4 group-hover:text-[#F3EBD8] transition-colors" />

@@ -9,6 +9,8 @@ const Register: React.FC = () => {
   const [dni, setDni] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [contrasena, setContrasena] = React.useState("");
+  const [idRol, setIdRol] = React.useState<number>(1);
+  const [matricula, setMatricula] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const navigate = useNavigate();
@@ -21,17 +23,26 @@ const Register: React.FC = () => {
       return;
     }
 
+    if (idRol === 2 && !matricula) {
+      Swal.fire("Falta la matrícula", "Debes ingresar la matrícula si el rol es Veterinario.", "warning");
+      return;
+    }
+
     try {
       setLoading(true);
 
-      const response = await api.post("/usuarios/registrar", {
+      const data: any = {
         nombre,
         apellido,
         dni,
         email,
         contrasena,
-        id_rol: 1,
-      });
+        id_rol: idRol,
+      };
+
+      if (idRol === 2) data.matricula = matricula;
+
+      const response = await api.post("/usuarios/registrar", data);
 
       Swal.fire("Registro exitoso", response.data.mensaje, "success");
       navigate("/");
@@ -53,21 +64,19 @@ const Register: React.FC = () => {
           className="w-20 h-20 rounded-full bg-transparent"
         />
         <h1 className="flex-1 text-center ml-[-70px] text-5xl font-serif font-bold text-[#F3EBD8] tracking-wider">
-  LA MAJA
-</h1>
-
+          LA MAJA
+        </h1>
       </header>
-    <div
-  className="fixed inset-0 z-0 w-full h-full"
-  style={{
-    backgroundImage: "url('/hermosa-naturaleza-retro-con-campo.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  }}
-></div>
 
-
+      <div
+        className="fixed inset-0 z-0 w-full h-full"
+        style={{
+          backgroundImage: "url('/hermosa-naturaleza-retro-con-campo.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      ></div>
 
       {/* Registration Form */}
       <div className="flex-1 flex items-center justify-center w-full relative z-10 py-8">
@@ -122,6 +131,28 @@ const Register: React.FC = () => {
             required
           />
 
+          {/* Selección de Rol */}
+          <select
+            value={idRol}
+            onChange={(e) => setIdRol(Number(e.target.value))}
+            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] border-2 border-[#345A35]/50 focus:ring-2 focus:ring-[#345A35] font-semibold"
+          >
+            <option value={1}>Encargado</option>
+            <option value={2}>Veterinario</option>
+          </select>
+
+          {/* Campo de matrícula visible solo para veterinario */}
+          {idRol === 2 && (
+            <input
+              type="text"
+              placeholder="Matrícula"
+              className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+              value={matricula}
+              onChange={(e) => setMatricula(e.target.value)}
+              required
+            />
+          )}
+
           <button
             type="submit"
             disabled={loading}
@@ -132,18 +163,17 @@ const Register: React.FC = () => {
 
           <div className="w-full border-t border-[#F3EBD8]/50 my-2"></div>
 
-           <button
-                type="button"
-                onClick={() => navigate("/login")}
-                className="italic cursor-pointer w-3/4 bg-[#345A35] text-[#F3EBD8] hover:text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#F3EBD8] transition-colors"
-                >
-                Volver al inicio de sesión
-            </button>
-
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="italic cursor-pointer w-3/4 bg-[#345A35] text-[#F3EBD8] hover:text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#F3EBD8] transition-colors"
+          >
+            Volver al inicio de sesión
+          </button>
         </form>
       </div>
     </div>
-  )
+  );
 };
 
 export default Register;

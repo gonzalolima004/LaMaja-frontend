@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Trash2, SquarePen, ArrowLeftToLine, ClipboardList } from "lucide-react";
+import { Trash2, SquarePen, ClipboardList } from "lucide-react";
 import Header from "../components/Header";
+import Swal from "sweetalert2";
 
 // Tipos
 interface Animal {
@@ -18,18 +19,6 @@ interface Procedimiento {
   tipo: string;
   fecha: string;
   id_animal: number;
-}
-
-// BOTÓN VOLVER
-function BackButton() {
-  return (
-    <button
-      onClick={() => window.history.back()}
-      className="bg-[#345A35] text-white px-4 py-2 rounded hover:bg-[#2a4a2b] flex items-center gap-2 fixed top-24 left-6 z-40"
-    >
-      <ArrowLeftToLine size={18} />
-    </button>
-  );
 }
 
 // FORMULARIO ANIMAL
@@ -78,14 +67,44 @@ function AnimalForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validación
+    if (
+      !formData.sexo ||
+      isNaN(formData.peso) ||
+      !formData.estado ||
+      !formData.fecha_nacimiento
+    ) {
+      Swal.fire({
+        icon: "warning",
+        title: "Campos incompletos",
+        text: "Por favor, complete todos los campos antes de guardar.",
+      });
+      return;
+    }
+
     try {
       if (animalEditando) {
         await axios.put(
           `http://localhost:3001/api/animales/${animalEditando.id_animal}`,
           formData
         );
+        Swal.fire({
+          icon: "success",
+          title: "Animal actualizado",
+          text: "Los datos del animal fueron actualizados correctamente.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
       } else {
         await axios.post("http://localhost:3001/api/animales", formData);
+        Swal.fire({
+          icon: "success",
+          title: "Animal registrado",
+          text: "El animal se registró correctamente.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
       }
       onAnimalGuardado();
       setFormData({
@@ -97,7 +116,11 @@ function AnimalForm({
       });
     } catch (error) {
       console.error(error);
-      alert("Error al guardar el animal");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ocurrió un error al guardar el animal.",
+      });
     }
   };
 
@@ -111,7 +134,7 @@ function AnimalForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-[#A1C084] p-6 rounded-2xl shadow-md mb-8"
+      className="bg-white p-6 rounded-2xl shadow-md mb-8 border border-[#A1C084]"
     >
       <h2 className="text-xl font-semibold text-[#345A35] mb-4">
         {animalEditando ? "Editar Animal" : "Registrar Animal"}
@@ -122,10 +145,9 @@ function AnimalForm({
           <label className="font-semibold text-[#345A35] mb-1">Sexo</label>
           <select
             name="sexo"
-            value={formData.sexo}
+            value={formData.seo}
             onChange={handleChange}
             className="p-2 border rounded"
-            required
           >
             <option value="">Seleccionar sexo</option>
             <option value="Macho">Macho</option>
@@ -142,18 +164,18 @@ function AnimalForm({
             value={isNaN(formData.peso) ? "" : formData.peso}
             onChange={handleChange}
             className="p-2 border rounded"
-            required
           />
         </div>
 
         <div className="flex flex-col">
-          <label className="font-semibold text-[#345A35] mb-1">Estado de salud</label>
+          <label className="font-semibold text-[#345A35] mb-1">
+            Estado de salud
+          </label>
           <select
             name="estado"
             value={formData.estado}
             onChange={handleChange}
             className="p-2 border rounded"
-            required
           >
             <option value="">Seleccionar estado</option>
             <option value="Sano">Sano</option>
@@ -163,14 +185,15 @@ function AnimalForm({
         </div>
 
         <div className="flex flex-col">
-          <label className="font-semibold text-[#345A35] mb-1">Fecha de nacimiento</label>
+          <label className="font-semibold text-[#345A35] mb-1">
+            Fecha de nacimiento
+          </label>
           <input
             name="fecha_nacimiento"
             type="date"
             value={formatDateInput(formData.fecha_nacimiento)}
             onChange={handleChange}
             className="p-2 border rounded"
-            required
           />
         </div>
 
@@ -189,7 +212,13 @@ function AnimalForm({
         type="submit"
         className="mt-4 bg-[#345A35] text-white px-6 py-2 rounded hover:bg-[#2a4a2b] flex items-center gap-2"
       >
-        {animalEditando ? <><SquarePen size={18} /> Actualizar</> : <>Guardar</>}
+        {animalEditando ? (
+          <>
+            <SquarePen size={18} /> Actualizar
+          </>
+        ) : (
+          <>Guardar</>
+        )}
       </button>
     </form>
   );
@@ -209,9 +238,7 @@ function ProcedimientoModal({
 
   const cargarProcedimientos = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:3001/api/procedimientos`
-      );
+      const res = await axios.get(`http://localhost:3001/api/procedimientos`);
       const filtrar = res.data.filter(
         (p: Procedimiento) => p.id_animal === animal.id_animal
       );
@@ -222,7 +249,14 @@ function ProcedimientoModal({
   };
 
   const handleGuardar = async () => {
-    if (!tipo || !fecha) return alert("Debe completar todos los campos");
+    if (!tipo || !fecha) {
+      Swal.fire({
+        icon: "warning",
+        title: "Campos incompletos",
+        text: "Debe completar todos los campos antes de guardar el procedimiento.",
+      });
+      return;
+    }
     try {
       await axios.post("http://localhost:3001/api/procedimientos", {
         tipo,
@@ -232,9 +266,20 @@ function ProcedimientoModal({
       setTipo("");
       setFecha("");
       cargarProcedimientos();
+      Swal.fire({
+        icon: "success",
+        title: "Procedimiento guardado",
+        text: "El procedimiento se registró correctamente.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error(error);
-      alert("Error al guardar el procedimiento");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ocurrió un error al guardar el procedimiento.",
+      });
     }
   };
 
@@ -243,8 +288,8 @@ function ProcedimientoModal({
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-[#F3EBD8] bg-opacity-90 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl w-[500px] shadow-lg">
+    <div className="fixed inset-0 bg-[#F3EBD8]/90 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-xl w-[500px] shadow-lg border border-[#A1C084]">
         <h2 className="text-2xl font-semibold text-[#345A35] mb-4">
           Procedimientos de {animal.sexo} #{animal.id_animal}
         </h2>
@@ -264,7 +309,7 @@ function ProcedimientoModal({
           />
           <button
             onClick={handleGuardar}
-            className="bg-[#345A35] text-white px-4 py-2 rounded hover:bg-[#2a4a2b]"
+            className="bg-[#345A35] text-white px-4 py-2 rounded hover:bg-[#2a4a2b] w-full"
           >
             Guardar Procedimiento
           </button>
@@ -284,7 +329,7 @@ function ProcedimientoModal({
 
         <button
           onClick={onClose}
-          className="mt-4 text-sm underline text-[#345A35]"
+          className="mt-5 bg-[#A1C084] text-[#345A35] px-4 py-2 rounded hover:bg-[#8db06f] w-full font-semibold transition"
         >
           Cerrar
         </button>
@@ -307,10 +352,14 @@ function AnimalTable({
 }) {
   const getEstadoColor = (estado: string) => {
     switch (estado) {
-      case "Sano": return "text-green-600";
-      case "Enfermo": return "text-red-600";
-      case "En revisión": return "text-yellow-600";
-      default: return "text-gray-800";
+      case "Sano":
+        return "text-green-600";
+      case "Enfermo":
+        return "text-red-600";
+      case "En revisión":
+        return "text-yellow-600";
+      default:
+        return "text-gray-800";
     }
   };
 
@@ -318,7 +367,7 @@ function AnimalTable({
     <table className="w-full border border-[#A1C084] rounded-lg shadow-md">
       <thead className="bg-[#345A35] text-white">
         <tr>
-          <th className="p-2">ID</th>
+          <th className="p-2">Caravana</th>
           <th className="p-2">Sexo</th>
           <th className="p-2">Peso</th>
           <th className="p-2">Estado</th>
@@ -333,13 +382,19 @@ function AnimalTable({
             <td className="p-2 text-center">{animal.id_animal}</td>
             <td className="p-2 text-center">{animal.sexo}</td>
             <td className="p-2 text-center">{animal.peso}</td>
-            <td className={`p-2 text-center font-semibold ${getEstadoColor(animal.estado)}`}>
+            <td
+              className={`p-2 text-center font-semibold ${getEstadoColor(
+                animal.estado
+              )}`}
+            >
               {animal.estado}
             </td>
             <td className="p-2 text-center">
               {new Date(animal.fecha_nacimiento).toLocaleDateString("es-ES")}
             </td>
-            <td className="p-2 text-center">{animal.vacunado ? "Sí" : "No"}</td>
+            <td className="p-2 text-center">
+              {animal.vacunado ? "Sí" : "No"}
+            </td>
             <td className="p-2 flex justify-center gap-2">
               <button
                 onClick={() => onEditar(animal)}
@@ -368,12 +423,14 @@ function AnimalTable({
 }
 
 // PÁGINA PRINCIPAL
-export default function AnimalesPage() {
+export default function Animales() {
   const [animales, setAnimales] = useState<Animal[]>([]);
   const [animalEditando, setAnimalEditando] = useState<Animal | null>(null);
   const [busquedaId, setBusquedaId] = useState<string>("");
   const [modoBusqueda, setModoBusqueda] = useState<boolean>(false);
-  const [animalProcedimiento, setAnimalProcedimiento] = useState<Animal | null>(null);
+  const [animalProcedimiento, setAnimalProcedimiento] = useState<Animal | null>(
+    null
+  );
 
   const cargarAnimales = async () => {
     try {
@@ -383,18 +440,46 @@ export default function AnimalesPage() {
       setModoBusqueda(false);
     } catch (error) {
       console.error(error);
-      alert("Error al cargar animales");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ocurrió un error al cargar los animales.",
+      });
     }
   };
 
   const eliminarAnimal = async (id: number) => {
-    try {
-      await axios.delete(`http://localhost:3001/api/animales/${id}`);
-      cargarAnimales();
-    } catch (error) {
-      console.error(error);
-      alert("Error al eliminar animal");
-    }
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "El animal se eliminará permanentemente.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#345A35",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`http://localhost:3001/api/animales/${id}`);
+          cargarAnimales();
+          Swal.fire({
+            icon: "success",
+            title: "Eliminado",
+            text: "El animal fue eliminado correctamente.",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Ocurrió un error al eliminar el animal.",
+          });
+        }
+      }
+    });
   };
 
   const buscarAnimalPorId = async () => {
@@ -411,11 +496,19 @@ export default function AnimalesPage() {
         setAnimales([animalEncontrado]);
         setModoBusqueda(true);
       } else {
-        alert("No se encontró un animal con ese ID");
+        Swal.fire({
+          icon: "info",
+          title: "Sin resultados",
+          text: "No se encontró un animal con ese ID.",
+        });
       }
     } catch (error) {
       console.error(error);
-      alert("No se encontró un animal con ese ID");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se encontró un animal con ese ID.",
+      });
     }
   };
 
@@ -426,9 +519,10 @@ export default function AnimalesPage() {
   return (
     <div className="min-h-screen bg-[#F3EBD8]">
       <Header />
-      <div className="max-w-5xl mx-auto p-6 pt-32 relative">
-        <BackButton />
-        <h1 className="text-3xl font-bold mb-6 text-[#345A35]">Gestión de Animales</h1>
+      <div className="max-w-5xl mx-auto p-6 pt-32">
+        <h1 className="text-3xl font-bold mb-6 text-[#345A35]">
+          Gestión de Animales
+        </h1>
 
         <AnimalForm
           animalEditando={animalEditando}

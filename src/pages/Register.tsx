@@ -23,6 +23,11 @@ const Register: React.FC = () => {
       return;
     }
 
+    if (dni.length !== 8) {
+      Swal.fire("DNI inválido", "El DNI debe tener exactamente 8 números.", "warning");
+      return;
+    }
+
     if (idRol === 2 && !matricula) {
       Swal.fire("Falta la matrícula", "Debes ingresar la matrícula si el rol es Veterinario.", "warning");
       return;
@@ -78,7 +83,6 @@ const Register: React.FC = () => {
         }}
       ></div>
 
-      {/* Registration Form */}
       <div className="flex-1 flex items-center justify-center w-full relative z-10 py-8">
         <form
           onSubmit={handleRegister}
@@ -86,33 +90,47 @@ const Register: React.FC = () => {
         >
           <h2 className="text-2xl font-semibold text-[#F3EBD8] mb-2 italic">Registro</h2>
 
+          {/* Nombre */}
           <input
             type="text"
             placeholder="Nombre"
             className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
             value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{0,30}$/.test(val)) setNombre(val);
+            }}
             required
           />
 
+          {/* Apellido */}
           <input
             type="text"
             placeholder="Apellido"
             className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
             value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{0,30}$/.test(val)) setApellido(val);
+            }}
             required
           />
 
+          {/* DNI */}
           <input
             type="text"
             placeholder="DNI"
+            maxLength={8}
             className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
             value={dni}
-            onChange={(e) => setDni(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (/^\d{0,8}$/.test(val)) setDni(val);
+            }}
             required
           />
 
+          {/* Email */}
           <input
             type="email"
             placeholder="Email"
@@ -122,14 +140,20 @@ const Register: React.FC = () => {
             required
           />
 
-          <input
+          {/* Contraseña */}
+         <input
             type="password"
             placeholder="Contraseña"
+            maxLength={20}
             className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
             value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val.length <= 20) setContrasena(val);
+            }}
             required
           />
+
 
           {/* Selección de Rol */}
           <select
@@ -141,7 +165,7 @@ const Register: React.FC = () => {
             <option value={2}>Veterinario</option>
           </select>
 
-          {/* Campo de matrícula visible solo para veterinario */}
+          {/* Matrícula */}
           {idRol === 2 && (
             <input
               type="text"
@@ -153,6 +177,7 @@ const Register: React.FC = () => {
             />
           )}
 
+          {/* Botón */}
           <button
             type="submit"
             disabled={loading}

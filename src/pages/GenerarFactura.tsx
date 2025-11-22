@@ -20,12 +20,29 @@ export default function GenerarFacturas() {
   });
 
   // 🔹 Obtener todos los presupuestos al cargar
-  useEffect(() => {
-    api
-      .get("/presupuestos")
-      .then((res) => setPresupuestos(res.data))
-      .catch(() => Swal.fire("Error", "No se pudieron cargar los presupuestos", "error"));
-  }, []);
+ useEffect(() => {
+  api
+    .get("/presupuestos")
+    .then((res) => {
+      const lista = res.data;
+
+      // 🔹 Filtrar presupuestos donde restante > 0
+      const filtrados = lista.filter((p: any) => {
+        const totalFacturado = (p.facturas || []).reduce(
+          (acc: number, f: any) => acc + (f.importe_total || 0),
+          0
+        );
+        const restante = p.importe_total - totalFacturado;
+        return restante > 0; // ← Solo se muestran los que NO están completados
+      });
+
+      setPresupuestos(filtrados);
+    })
+    .catch(() =>
+      Swal.fire("Error", "No se pudieron cargar los presupuestos", "error")
+    );
+}, []);
+
 
   const showAlert = (title: string, text: string, icon: "success" | "error" | "warning" | "info") => {
     Swal.fire({ title, text, icon, confirmButtonColor: "#345A35" });

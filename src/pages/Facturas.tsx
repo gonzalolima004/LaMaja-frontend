@@ -3,12 +3,10 @@ import api from "../services/api";
 import { Trash2, FileText } from "lucide-react";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
-import { generarPDFFactura } from "../services/GenerarPDF_Factura"; 
-import { BookText } from "lucide-react";
+import { generarPDFFactura } from "../services/GenerarPDF_Factura";
 
 const HistorialFacturas = () => {
   const [facturas, setFacturas] = useState<any[]>([]);
-  const [presupuestos, setPresupuestos] = useState<{ [id: number]: string }>({});
 
   useEffect(() => {
     const obtenerFacturas = async () => {
@@ -21,27 +19,6 @@ const HistorialFacturas = () => {
     };
     obtenerFacturas();
   }, []);
-
-  useEffect(() => {
-    const fetchPresupuestos = async () => {
-      for (const f of facturas) {
-        const id = f.id_presupuesto;
-        if (!presupuestos[id]) {
-          try {
-            const res = await api.get(`/presupuestos/${id}`);
-            const presupuestoNombre = `Presupuesto #${res.data.presupuesto.id_presupuesto}`;
-            setPresupuestos((prev) => ({ ...prev, [id]: presupuestoNombre }));
-          } catch (error) {
-            console.error("Error al obtener el presupuesto:", error);
-            setPresupuestos((prev) => ({ ...prev, [id]: "Desconocido" }));
-          }
-        }
-      }
-    };
-    if (facturas.length > 0) {
-      fetchPresupuestos();
-    }
-  }, [facturas]);
 
   const eliminarFactura = (id_factura_venta: number) => {
     Swal.fire({
@@ -69,6 +46,12 @@ const HistorialFacturas = () => {
     });
   };
 
+  // === FUNCIÓN PARA OBTENER COLOR DEL IMPORTE DEL PRESUPUESTO ===
+  const obtenerColorPresupuesto = (restante: number) => {
+    if (restante === 0) return "text-green-700 font-bold"; // Completamente facturado
+    return "text-yellow-700 font-bold"; // Aún falta facturar
+  };
+
   return (
     <>
       <Header />
@@ -88,7 +71,11 @@ const HistorialFacturas = () => {
                     <th className="px-2 py-2 sm:px-4 sm:py-3">N°</th>
                     <th className="px-2 py-2 sm:px-4 sm:py-3">Tipo</th>
                     <th className="px-2 py-2 sm:px-4 sm:py-3">Presupuesto</th>
-                    <th className="px-2 py-2 sm:px-4 sm:py-3">Importe Total</th>
+
+                    {/* NUEVA COLUMNA */}
+                    <th className="px-2 py-2 sm:px-4 sm:py-3">Importe del Presupuesto</th>
+
+                    <th className="px-2 py-2 sm:px-4 sm:py-3">Importe Total Facturado</th>
                     <th className="px-2 py-2 sm:px-4 sm:py-3">Fecha</th>
                     <th className="px-2 py-2 sm:px-4 sm:py-3">PDF</th>
                     <th className="px-2 py-2 sm:px-4 sm:py-3">Acciones</th>
@@ -96,39 +83,67 @@ const HistorialFacturas = () => {
                 </thead>
 
                 <tbody className="bg-[#A1C084] divide-y divide-gray-200 font-bold">
-                  {facturas.map((f, index) => (
-                    <tr key={f.id_factura_venta}>
-                      <td className="px-2 py-2 sm:px-4 sm:py-4">{index + 1}</td>
-                      <td className="px-2 py-2 sm:px-4 sm:py-4">{f.tipo}</td>
-                      <td className="px-2 py-2 sm:px-4 sm:py-4">
-                        {presupuestos[f.id_presupuesto] || "Cargando..."}
-                      </td>
-                      <td className="px-2 py-2 sm:px-4 sm:py-4">
-                        ${f.importe_total}
-                      </td>
-                      <td className="px-2 py-2 sm:px-4 sm:py-4">
-                        {new Date(f.fecha).toLocaleDateString("es-AR")}
-                      </td>
-                      <td className="px-2 py-2 sm:px-4 sm:py-4 flex justify-center">
-                        <button
-                          onClick={() => generarPDFFactura(f)}
-                          className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-md flex items-center text-xs sm:text-sm"
-                        >
-                          <FileText className="w-4 h-4 mr-1" />
-                          PDF
-                        </button>
-                      </td>
-                      <td className="px-2 py-2 sm:px-4 sm:py-4">
-                        <button
-                          onClick={() => eliminarFactura(f.id_factura_venta)}
-                          className="cursor-pointer text-red-700 bg-red-100 hover:bg-red-200 px-2 py-1 rounded-md inline-flex items-center text-xs sm:text-sm"
-                        >
-                          <Trash2 className="w-4 h-4 mr-1" />
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {facturas.map((f, index) => {
+                    const totalPresupuesto = f.presupuesto?.importe_total || 0;
+
+                    const totalFacturado =
+                      f.presupuesto?.facturas?.reduce(
+                        (acc: number, fac: any) => acc + fac.importe_total,
+                        0
+                      ) || 0;
+
+                    const restante = totalPresupuesto - totalFacturado;
+
+                    const colorPresupuesto = obtenerColorPresupuesto(restante);
+
+                    return (
+                      <tr key={f.id_factura_venta}>
+                        <td className="px-2 py-2 sm:px-4 sm:py-4">{index + 1}</td>
+                        <td className="px-2 py-2 sm:px-4 sm:py-4">{f.tipo}</td>
+
+                        {/* Presupuesto */}
+                        <td className="px-2 py-2 sm:px-4 sm:py-4">
+                          {f.presupuesto
+                            ? `#${f.presupuesto.id_presupuesto} - ${f.presupuesto.cliente?.nombre} ${f.presupuesto.cliente?.apellido}`
+                            : "Desconocido"}
+                        </td>
+
+                        {/* NUEVA COLUMNA: IMPORTE DEL PRESUPUESTO */}
+                        <td className={`px-2 py-2 sm:px-4 sm:py-4 ${colorPresupuesto}`}>
+                          ${totalPresupuesto.toLocaleString("es-AR")}
+                        </td>
+
+                        {/* Importe de la factura */}
+                        <td className="px-2 py-2 sm:px-4 sm:py-4">
+                          ${f.importe_total.toLocaleString("es-AR")}
+                        </td>
+
+                        <td className="px-2 py-2 sm:px-4 sm:py-4">
+                          {new Date(f.fecha).toLocaleDateString("es-AR")}
+                        </td>
+
+                        <td className="px-2 py-2 sm:px-4 sm:py-4 flex justify-center">
+                          <button
+                            onClick={() => generarPDFFactura(f)}
+                            className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-md flex items-center text-xs sm:text-sm"
+                          >
+                            <FileText className="w-4 h-4 mr-1" />
+                            PDF
+                          </button>
+                        </td>
+
+                        <td className="px-2 py-2 sm:px-4 sm:py-4">
+                          <button
+                            onClick={() => eliminarFactura(f.id_factura_venta)}
+                            className="cursor-pointer text-red-700 bg-red-100 hover:bg-red-200 px-2 py-1 rounded-md inline-flex items-center text-xs sm:text-sm"
+                          >
+                            <Trash2 className="w-4 h-4 mr-1" />
+                            Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

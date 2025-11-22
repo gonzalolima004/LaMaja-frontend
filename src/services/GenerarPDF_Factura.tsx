@@ -162,7 +162,7 @@ export const generarPDFFactura = (factura: any) => {
   doc.setFontSize(13);
   doc.setTextColor(255, 255, 255);
   doc.text(
-    `TOTAL: $${factura.importe_total.toLocaleString("es-AR")}`,
+    `TOTAL FACTURADO: $${factura.importe_total.toLocaleString("es-AR")}`,
     doc.internal.pageSize.getWidth() - margin - 5,
     currentY + 20,
     { align: "right" }

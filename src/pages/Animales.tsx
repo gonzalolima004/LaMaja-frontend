@@ -145,7 +145,7 @@ function AnimalForm({
           <label className="font-semibold text-[#345A35] mb-1">Sexo</label>
           <select
             name="sexo"
-            value={formData.seo}
+            value={formData.sexo}
             onChange={handleChange}
             className="p-2 border rounded"
           >
@@ -301,12 +301,14 @@ function ProcedimientoModal({
             onChange={(e) => setFecha(e.target.value)}
             className="w-full border p-2 rounded"
           />
+
           <textarea
             placeholder="Describa el procedimiento realizado"
             value={tipo}
             onChange={(e) => setTipo(e.target.value)}
             className="w-full border p-2 rounded"
           />
+
           <button
             onClick={handleGuardar}
             className="bg-[#345A35] text-white px-4 py-2 rounded hover:bg-[#2a4a2b] w-full"
@@ -318,6 +320,7 @@ function ProcedimientoModal({
         <h3 className="text-lg font-semibold mt-5 mb-2 text-[#345A35]">
           Historial
         </h3>
+
         <ul className="max-h-40 overflow-y-auto border rounded p-2 text-sm">
           {procedimientos.map((p) => (
             <li key={p.id_procedimiento_veterinario} className="mb-1">
@@ -338,7 +341,7 @@ function ProcedimientoModal({
   );
 }
 
-// TABLA DE ANIMALES
+// TABLA DE ANIMALES (CON TOOLTIP)
 function AnimalTable({
   animales,
   onEliminar,
@@ -376,12 +379,14 @@ function AnimalTable({
           <th className="p-2">Acciones</th>
         </tr>
       </thead>
+
       <tbody className="bg-white">
         {animales.map((animal) => (
           <tr key={animal.id_animal} className="border-t">
             <td className="p-2 text-center">{animal.id_animal}</td>
             <td className="p-2 text-center">{animal.sexo}</td>
             <td className="p-2 text-center">{animal.peso}</td>
+
             <td
               className={`p-2 text-center font-semibold ${getEstadoColor(
                 animal.estado
@@ -389,31 +394,65 @@ function AnimalTable({
             >
               {animal.estado}
             </td>
+
             <td className="p-2 text-center">
               {new Date(animal.fecha_nacimiento).toLocaleDateString("es-ES")}
             </td>
+
             <td className="p-2 text-center">
               {animal.vacunado ? "Sí" : "No"}
             </td>
-            <td className="p-2 flex justify-center gap-2">
-              <button
-                onClick={() => onEditar(animal)}
-                className="bg-[#A1C084] text-[#345A35] px-3 py-1 rounded hover:bg-[#8db06f]"
-              >
-                <SquarePen size={16} />
-              </button>
-              <button
-                onClick={() => onEliminar(animal.id_animal!)}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-              >
-                <Trash2 size={16} />
-              </button>
-              <button
-                onClick={() => onVerProcedimientos(animal)}
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-              >
-                <ClipboardList size={16} />
-              </button>
+
+            <td className="p-2 flex justify-center gap-3">
+
+              {/* EDITAR */}
+              <div className="relative group">
+                <button
+                  onClick={() => onEditar(animal)}
+                  className="bg-[#A1C084] text-[#345A35] px-3 py-1 rounded hover:bg-[#8db06f]"
+                >
+                  <SquarePen size={18} />
+                </button>
+
+                <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 
+                  opacity-0 group-hover:opacity-100 transition pointer-events-none
+                  bg-black text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+                  Editar
+                </span>
+              </div>
+
+              {/* ELIMINAR */}
+              <div className="relative group">
+                <button
+                  onClick={() => onEliminar(animal.id_animal!)}
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                >
+                  <Trash2 size={18} />
+                </button>
+
+                <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 
+                  opacity-0 group-hover:opacity-100 transition pointer-events-none
+                  bg-black text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+                  Eliminar
+                </span>
+              </div>
+
+              {/* PROCEDIMIENTOS */}
+              <div className="relative group">
+                <button
+                  onClick={() => onVerProcedimientos(animal)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                >
+                  <ClipboardList size={18} />
+                </button>
+
+                <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 
+                  opacity-0 group-hover:opacity-100 transition pointer-events-none
+                  bg-black text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+                  Procedimientos
+                </span>
+              </div>
+
             </td>
           </tr>
         ))}
@@ -499,7 +538,7 @@ export default function Animales() {
         Swal.fire({
           icon: "info",
           title: "Sin resultados",
-          text: "No se encontró un animal con ese ID.",
+          text: "No se encontró un animal con esa caravana.",
         });
       }
     } catch (error) {
@@ -507,7 +546,7 @@ export default function Animales() {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "No se encontró un animal con ese ID.",
+        text: "No se encontró un animal con esa caravana.",
       });
     }
   };
@@ -532,10 +571,10 @@ export default function Animales() {
         <div className="flex items-center gap-2 mb-6">
           <input
             type="number"
-            placeholder="Buscar por ID"
+            placeholder="Buscar por caravana"
             value={busquedaId}
             onChange={(e) => setBusquedaId(e.target.value)}
-            className="border p-2 rounded"
+            className="cursor-pointer border p-2 rounded"
           />
           <button
             onClick={buscarAnimalPorId}

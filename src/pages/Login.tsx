@@ -1,8 +1,6 @@
-
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-
 
 const Login: React.FC = () => {
     const [email, setEmail] = React.useState<string>('');
@@ -20,11 +18,12 @@ const Login: React.FC = () => {
                 contrasena,
             });
 
-            const { token } = response.data;
-            
-            localStorage.setItem('token', token);
+            const { token, usuario } = response.data;
 
-            navigate('/home');
+            localStorage.setItem("token", token);
+            localStorage.setItem("usuario", JSON.stringify(usuario));
+
+            navigate('/admin/home');
 
         } catch (err: any) {
             console.error('Error al iniciar sesión:', err);
@@ -35,6 +34,7 @@ const Login: React.FC = () => {
     return (
         <form onSubmit={handleLogin}>
             <h2>Iniciar Sesión</h2>
+
             <input
                 type="email"
                 value={email}
@@ -42,6 +42,7 @@ const Login: React.FC = () => {
                 placeholder="Email"
                 required
             />
+
             <input
                 type="password"
                 value={contrasena}
@@ -49,6 +50,7 @@ const Login: React.FC = () => {
                 placeholder="Contraseña"
                 required
             />
+
             <button type="submit">Entrar</button>
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </form>

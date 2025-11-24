@@ -3,9 +3,10 @@ import api from "../services/api";
 import { Trash2, FileText } from "lucide-react";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
-import { generarPDF } from "../services/GenerarPDF";
+import { GenerarPDFPresupuesto } from "../services/GenerarPDFPresupuesto";
+import { Link } from "react-router-dom";
 
-const HistorialPresupuestos = () => {
+export default function HistorialPresupuestos() {
   const [presupuestos, setPresupuestos] = useState<any[]>([]);
   const [nombresClientes, setNombresClientes] = useState<{ [id: number]: string }>({});
 
@@ -108,7 +109,7 @@ const HistorialPresupuestos = () => {
                       </td>
                       <td className="px-2 py-2 sm:px-4 sm:py-4 flex justify-center">
                         <button
-                          onClick={() => generarPDF(p)}
+                          onClick={() => GenerarPDFPresupuesto(p)}
                           className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-md flex items-center text-xs sm:text-sm"
                         >
                           <FileText className="w-4 h-4 mr-1" />
@@ -133,8 +134,10 @@ const HistorialPresupuestos = () => {
           </div>
         </div>
       </div>
+
+
+
+
     </>
   );
 };
-
-export default HistorialPresupuestos;

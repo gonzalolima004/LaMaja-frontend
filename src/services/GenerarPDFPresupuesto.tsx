@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-export const generarPDF = (presupuesto: any) => {
+export const GenerarPDFPresupuesto = (presupuesto: any) => {
   const doc = new jsPDF({
     unit: "mm",
     format: "a4",

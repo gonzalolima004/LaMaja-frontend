@@ -19,21 +19,21 @@ export default function GenerarFacturas() {
     id_presupuesto: "",
   });
 
-  // 🔹 Obtener todos los presupuestos al cargar
+  // Obtener todos los presupuestos al cargar
  useEffect(() => {
   api
     .get("/presupuestos")
     .then((res) => {
       const lista = res.data;
 
-      // 🔹 Filtrar presupuestos donde restante > 0
+      // Filtrar presupuestos donde restante > 0
       const filtrados = lista.filter((p: any) => {
         const totalFacturado = (p.facturas || []).reduce(
           (acc: number, f: any) => acc + (f.importe_total || 0),
           0
         );
         const restante = p.importe_total - totalFacturado;
-        return restante > 0; // ← Solo se muestran los que NO están completados
+        return restante > 0;
       });
 
       setPresupuestos(filtrados);
@@ -48,7 +48,7 @@ export default function GenerarFacturas() {
     Swal.fire({ title, text, icon, confirmButtonColor: "#345A35" });
   };
 
-  // 🔹 Cambiar presupuesto seleccionado y calcular totales
+  // Cambiar presupuesto seleccionado y calcular totales
   const handlePresupuestoChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = e.target.value;
     setFactura({ ...factura, id_presupuesto: id });

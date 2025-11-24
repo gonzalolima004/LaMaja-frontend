@@ -4,7 +4,6 @@ import { Trash2, FileText } from "lucide-react";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
 import { GenerarPDFPresupuesto } from "../services/GenerarPDFPresupuesto";
-import { Link } from "react-router-dom";
 
 export default function HistorialPresupuestos() {
   const [presupuestos, setPresupuestos] = useState<any[]>([]);

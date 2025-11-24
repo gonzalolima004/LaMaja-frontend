@@ -7,13 +7,13 @@ export default function ResumenPresupuesto({
   onGuardar
 }: any) {
 
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-    const GenerarPresupuestoClick = async () => {
-  setLoading(true)
-  await onGuardar()
-  setLoading(false)
-}
+  const GenerarPresupuestoClick = async () => {
+    setLoading(true)
+    await onGuardar()
+    setLoading(false)
+  }
 
 
   const eliminarAnimal = (detalle: any) => {
@@ -90,13 +90,13 @@ export default function ResumenPresupuesto({
 
               <div className="border-t-2 border-gray-200 pt-6">
                 <button
-  onClick={GenerarPresupuestoClick}
-  disabled={loading}
-  className={`w-full bg-gradient-to-r from-[#345A35] to-[#274427] text-white font-bold py-4 rounded-xl 
+                  onClick={GenerarPresupuestoClick}
+                  disabled={loading}
+                  className={`w-full bg-gradient-to-r from-[#345A35] to-[#274427] text-white font-bold py-4 rounded-xl 
   ${loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90 cursor-pointer"}`}
->
-  {loading ? "Generando presupuesto..." : "Generar Presupuesto"}
-</button>
+                >
+                  {loading ? "Generando presupuesto..." : "Generar Presupuesto"}
+                </button>
 
               </div>
             </>

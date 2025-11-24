@@ -3,17 +3,17 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import RestablecerContraseña from "./pages/RestablecerContraseña";
 import Home from './pages/Home'
-import Animales from './pages/Animales'
-import VerificadorToken from './services/VerificadorToken'
-
+import Animales from './pages/GestionAnimales/Animales'
 import Cobros from './pages/Cobros'
-import Presupuestos from './pages/Presupuestos'
-import GenerarPresupuestos from './pages/GenerarPresupuestos'
+import Presupuestos from './pages/HistorialPresupuestos'
+import GenerarPresupuestos from './pages/GenerarPresupuestos/GenerarPresupuestos'
 import Facturas from './pages/Facturas'
 import GenerarFacturas from './pages/GenerarFactura'
 
+import VerificadorToken from './services/VerificadorToken'
 import RutaProtegida from './services/RutaProtegida'
 
+/* Todo testeado, funciona perfecto */
 const App: React.FC = () => {
   return (
     <BrowserRouter>
@@ -21,7 +21,6 @@ const App: React.FC = () => {
 
         {/* Rutas públicas */}
         <Route path="/" element={<Login />} />
-        <Route path="/registrar" element={<Register />} />
         <Route path="/restablecer/:token" element={<RestablecerContraseña />} />
 
 
@@ -35,6 +34,8 @@ const App: React.FC = () => {
 
           {/* Rutas protegidas solo para rol encargado */}
           <Route path="/cobros"element= {<RutaProtegida roles={[1]} element={<Cobros />} />}/>
+          <Route path="/registrar"element= {<RutaProtegida roles={[1]} element={<Register />} />}/>
+
 
           <Route path="/historial-presupuestos" element={<RutaProtegida roles={[1]} element={<Presupuestos />} />}/>
 
@@ -45,8 +46,8 @@ const App: React.FC = () => {
           <Route path="/generar-facturas" element={<RutaProtegida roles={[1]} element={<GenerarFacturas />} />} />
         </Route>
 
-        {/* Redirección al inicio de sesión si la ruta no existe */}
-        <Route path="*" element={<Navigate to="/" />} />
+        {/* Redirección si la ruta no existe (/home si está logueado, sino a /) */}
+        <Route path="*" element={<Navigate to="/home" />} />
 
       </Routes>
     </BrowserRouter>

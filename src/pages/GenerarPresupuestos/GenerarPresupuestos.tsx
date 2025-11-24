@@ -21,7 +21,7 @@ export default function GenerarPresupuestos() {
         confirmButtonColor: "#345A35"
       })
 
-      navigate("/admin/home")  
+      navigate("/home")  
     }
   }, [])
 

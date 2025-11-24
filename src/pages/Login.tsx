@@ -29,7 +29,6 @@ const Login: React.FC = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("usuario", JSON.stringify(usuario));
 
-      Swal.fire("¡Bienvenido!", "Inicio de sesión exitoso.", "success");
       navigate("/home");
     } catch (err: any) {
       console.error("Error al iniciar sesión:", err);
@@ -116,14 +115,6 @@ const Login: React.FC = () => {
           </button>
 
           <div className="w-full border-t-2 border-[#345A35]/30 my-4"></div>
-
-          <button
-            type="button"
-            onClick={() => navigate("/register")}
-            className="cursor-pointer w-3/4 bg-[#F3EBD8] text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#345A35] hover:text-[#F3EBD8] transition-colors"
-          >
-            Registrar
-          </button>
 
           <button
             type="button"

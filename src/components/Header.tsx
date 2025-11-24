@@ -1,14 +1,17 @@
-import { LogOut, ArrowLeft, BookText } from "lucide-react"
+import { LogOut, ArrowLeft, BookText, UserRoundPlus } from "lucide-react"
 import { useNavigate, useLocation } from "react-router-dom"
 
 export default function Header() {
   const navigate = useNavigate()
   const location = useLocation()
 
+  const usuario = JSON.parse(localStorage.getItem("usuario") || "{}")
+  const rol = usuario.id_rol
+
   const logout = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("usuario")
-    navigate("/ingresar")
+    navigate("/")
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -21,18 +24,23 @@ export default function Header() {
     navigate("/generar-presupuestos")
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  
+
   const goGenerarFacturas = () => {
-  navigate('/generar-facturas');
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+    navigate('/generar-facturas');
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const goRegistro = () => {
+    navigate('/registrar');
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
 
   return (
-    <header className="bg-gradient-to-r from-[#F3EBD8] to-[#FBF6ED] border-b border-[#345A35] w-full shadow-md">
+    <header className="bg-gradient-to-r from-[#F3EBD8] to-[#FBF6ED] border-b border-[#345A35] w-full shadow-md z-20">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
         <div className="flex items-center gap-3 sm:gap-4 md:gap-5 min-w-0">
-          {location.pathname !== "/admin/home" && (
+          {location.pathname !== "/home" && (
             <button
               onClick={goBack}
               className="flex-shrink-0 cursor-pointer p-2.5 sm:p-3 bg-[#345A35] text-[#F3EBD8] rounded-lg hover:bg-[#2a4620] hover:shadow-lg transition-all duration-200 active:scale-95"
@@ -49,14 +57,28 @@ export default function Header() {
             LA MAJA
           </h1>
         </div>
+        <div className="flex items-center gap-3">
+          {/* REGISTRAR USUARIO - SOLO PARA rol === 1 */}
+          {rol === 1 && location.pathname !== "/registrar" && (
+            <button
+              onClick={goRegistro}
+              className="cursor-pointer flex items-center gap-2 sm:gap-2.5 flex-shrink-0 px-3 py-2.5 sm:px-4 sm:py-3 bg-[#345A35] text-[#F3EBD8] rounded-lg hover:bg-[#2a4620] hover:shadow-lg transition-all duration-200 active:scale-95 text-sm sm:text-base font-medium"
+            >
+              <UserRoundPlus className="w-5 h-5 flex-shrink-0" />
+              <span className="hidden sm:inline font-medium text-sm">Registrar usuario</span>
+            </button>
+          )}
 
-        <button
-          onClick={logout}
-          className="cursor-pointer flex items-center gap-2 sm:gap-2.5 flex-shrink-0 px-3 py-2.5 sm:px-4 sm:py-3 bg-[#345A35] text-[#F3EBD8] rounded-lg hover:bg-[#2a4620] hover:shadow-lg transition-all duration-200 active:scale-95 text-sm sm:text-base font-medium"
-        >
-          <LogOut className="w-5 h-5 flex-shrink-0" />
-          <span className="hidden sm:inline font-medium text-sm">Cerrar Sesión</span>
-        </button>
+          <button
+            onClick={logout}
+            className="cursor-pointer flex items-center gap-2 sm:gap-2.5 flex-shrink-0 px-3 py-2.5 sm:px-4 sm:py-3 bg-[#345A35] text-[#F3EBD8] rounded-lg hover:bg-[#2a4620] hover:shadow-lg transition-all duration-200 active:scale-95 text-sm sm:text-base font-medium"
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            <span className="hidden sm:inline font-medium text-sm">Cerrar Sesión</span>
+          </button>
+
+        </div>
+
       </div>
 
       {location.pathname === "/historial-presupuestos" && (
@@ -68,7 +90,8 @@ export default function Header() {
           <span className="hidden sm:inline">Generar Presupuestos</span>
         </button>
       )}
-       {/* Botón flotante de facturas */}
+
+      {/* Botón flotante de facturas */}
       {location.pathname === '/historial-facturas' && (
         <button
           onClick={goGenerarFacturas}

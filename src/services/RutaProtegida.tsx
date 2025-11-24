@@ -23,7 +23,7 @@ export default function RutaProtegida({ element, roles }: any) {
       confirmButtonColor: "#345A35"
     });
 
-    return <Navigate to="/admin/home" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return element;

@@ -2,6 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import Swal from "sweetalert2";
+import Header from "../components/Header";
 
 const Register: React.FC = () => {
   const [nombre, setNombre] = React.useState("");
@@ -62,16 +63,6 @@ const Register: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F3EBD8] flex flex-col">
-      <header className="w-full flex items-center px-8 py-4 bg-[#345A35] z-10">
-        <img
-          src="/logo-sin-letras.png"
-          alt="Logo La Maja"
-          className="w-20 h-20 rounded-full bg-transparent"
-        />
-        <h1 className="flex-1 text-center ml-[-70px] text-5xl font-serif font-bold text-[#F3EBD8] tracking-wider">
-          LA MAJA
-        </h1>
-      </header>
 
       <div
         className="fixed inset-0 z-0 w-full h-full"
@@ -82,19 +73,22 @@ const Register: React.FC = () => {
           backgroundRepeat: "no-repeat",
         }}
       ></div>
+      <Header />
 
-      <div className="flex-1 flex items-center justify-center w-full relative z-10 py-8">
+      <div className="flex-1 flex items-center justify-center w-full relative z-10 py-2">
         <form
           onSubmit={handleRegister}
-          className="bg-[#A1C084]/90 backdrop-blur-sm w-full max-w-md rounded-3xl shadow-2xl flex flex-col items-center py-8 px-8 space-y-4 mx-4"
+          className="bg-[#A1C084]/90 backdrop-blur-sm w-full max-w-md 
+             rounded-3xl shadow-2xl flex flex-col items-center 
+             py-4 px-6 space-y-3 mx-4"
         >
-          <h2 className="text-2xl font-semibold text-[#F3EBD8] mb-2 italic">Registro</h2>
+          <h2 className="text-2xl font-semibold text-[#F3EBD8] mb-2 italic">Registrar nuevo usuario</h2>
 
           {/* Nombre */}
           <input
             type="text"
             placeholder="Nombre"
-            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            className="w-full p-2 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35] pl-6"
             value={nombre}
             onChange={(e) => {
               const val = e.target.value;
@@ -107,7 +101,7 @@ const Register: React.FC = () => {
           <input
             type="text"
             placeholder="Apellido"
-            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            className="w-full p-2 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35] pl-6"
             value={apellido}
             onChange={(e) => {
               const val = e.target.value;
@@ -121,7 +115,7 @@ const Register: React.FC = () => {
             type="text"
             placeholder="DNI"
             maxLength={8}
-            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            className="w-full p-2 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35] pl-6"
             value={dni}
             onChange={(e) => {
               const val = e.target.value;
@@ -134,18 +128,18 @@ const Register: React.FC = () => {
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            className="w-full p-2 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35] pl-6"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
 
           {/* Contraseña */}
-         <input
+          <input
             type="password"
             placeholder="Contraseña"
             maxLength={20}
-            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            className="w-full p-2 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35] pl-6"
             value={contrasena}
             onChange={(e) => {
               const val = e.target.value;
@@ -159,7 +153,7 @@ const Register: React.FC = () => {
           <select
             value={idRol}
             onChange={(e) => setIdRol(Number(e.target.value))}
-            className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] border-2 border-[#345A35]/50 focus:ring-2 focus:ring-[#345A35] font-semibold"
+            className="w-full p-2 rounded-full bg-[#F3EBD8] text-[#345A35] border-2 border-[#345A35]/50 focus:ring-2 focus:ring-[#345A35] font-semibold pl-5 pr-10"
           >
             <option value={1}>Encargado</option>
             <option value={2}>Veterinario</option>
@@ -170,7 +164,7 @@ const Register: React.FC = () => {
             <input
               type="text"
               placeholder="Matrícula"
-              className="w-full p-3 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+              className="w-full p-2 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/60 focus:outline-none focus:ring-2 focus:ring-[#345A35] pl-6"
               value={matricula}
               onChange={(e) => setMatricula(e.target.value)}
               required
@@ -186,19 +180,12 @@ const Register: React.FC = () => {
             {loading ? "Registrando..." : "Registrar"}
           </button>
 
-          <div className="w-full border-t border-[#F3EBD8]/50 my-2"></div>
 
-          <button
-            type="button"
-            onClick={() => navigate("/login")}
-            className="italic cursor-pointer w-3/4 bg-[#345A35] text-[#F3EBD8] hover:text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#F3EBD8] transition-colors"
-          >
-            Volver al inicio de sesión
-          </button>
         </form>
       </div>
     </div>
   );
+
 };
 
 export default Register;

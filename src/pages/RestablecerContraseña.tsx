@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import api from "../services/api";
 
 const RestablecerContraseña = () => {
-  const { token } = useParams(); // 👈 obtiene el token desde la URL
+  const { token } = useParams(); 
   const navigate = useNavigate();
 
   const [nuevaContrasena, setNuevaContrasena] = useState("");

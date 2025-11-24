@@ -64,7 +64,6 @@ export default function Home() {
             ${isRestricted ? "text-gray-500" : "text-[#345A35] group-hover:text-[#F3EBD8]"}
           `}/>
           <h2 className="text-xl md:text-2xl font-semibold">Ventas</h2>
-        </Link>
 
         {/* COBROS */}
         <Link

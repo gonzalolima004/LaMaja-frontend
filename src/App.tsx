@@ -3,7 +3,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import RestablecerContraseña from "./pages/RestablecerContraseña";
 import Home from './pages/Home'
-import Animales from './pages/GestionAnimales/Animales'
+import Animales from './pages/Animales'
 import Cobros from './pages/Cobros'
 import Presupuestos from './pages/HistorialPresupuestos'
 import GenerarPresupuestos from './pages/GenerarPresupuestos/GenerarPresupuestos'

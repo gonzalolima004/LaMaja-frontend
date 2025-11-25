@@ -94,6 +94,50 @@ export const generarPDFFactura = (factura: any) => {
 
   currentY += 10;
 
+  // === DATOS DEL CLIENTE ===
+  if (factura.presupuesto?.cliente) {
+    const c = factura.presupuesto.cliente;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(52, 90, 53);
+    doc.text("Datos del Cliente", doc.internal.pageSize.getWidth() / 2, currentY, {
+      align: "center",
+    });
+
+    currentY += 10;
+
+    const tableColumnCliente = ["Nombre", "Apellido", "DNI", "Dirección"];
+    const tableRowsCliente = [
+      [
+        c.nombre,
+        c.apellido,
+        c.dni,
+        c.direccion
+      ],
+    ];
+
+    autoTable(doc, {
+      startY: currentY,
+      head: [tableColumnCliente],
+      body: tableRowsCliente,
+      theme: "striped",
+      headStyles: {
+        fillColor: [52, 90, 53],
+        textColor: 255,
+        fontStyle: "bold",
+        fontSize: 11,
+      },
+      bodyStyles: {
+        textColor: [60, 60, 60],
+        fontSize: 10,
+      },
+      margin: { left: margin, right: margin },
+    });
+
+    currentY = (doc as any).lastAutoTable.finalY + 15;
+  }
+
   // === DATOS DEL PRESUPUESTO ===
   if (factura.presupuesto) {
     const presupuesto = factura.presupuesto;
@@ -132,18 +176,9 @@ export const generarPDFFactura = (factura: any) => {
         fontSize: 10,
       },
       margin: { left: margin, right: margin },
-      columnStyles: {
-        0: { cellWidth: 50 },
-        1: { cellWidth: 50 },
-        2: { cellWidth: 50 },
-      },
     });
 
     currentY = (doc as any).lastAutoTable.finalY + 10;
-  } else {
-    doc.setFontSize(11);
-    doc.setTextColor(150, 0, 0);
-    doc.text("No se encontraron datos del presupuesto.", margin + 10, currentY);
   }
 
   // === TOTAL ===

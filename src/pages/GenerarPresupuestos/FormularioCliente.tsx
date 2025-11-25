@@ -2,7 +2,7 @@ import { User } from "lucide-react"
 
 export default function FormularioCliente({ cliente, setCliente }: any) {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8 border border-gray-100 max-w-5xl mx-auto mb-10">
+    <div className="bg-white rounded-2xl shadow-lg p-8 md:p-8 mb-8 border border-gray-100 max-w-7xl mx-auto mb-10">
       <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
         <User size={24} className="text-[#345A35]" /> Datos del Cliente
       </h2>

@@ -1,4 +1,4 @@
-import { LogOut, ArrowLeft, BookText, UserRoundPlus } from "lucide-react"
+import { LogOut, ArrowLeft, UserRoundPlus } from "lucide-react"
 import { useNavigate, useLocation } from "react-router-dom"
 
 export default function Header() {
@@ -20,15 +20,6 @@ export default function Header() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  const goGenerarPresupuestos = () => {
-    navigate("/generar-presupuestos")
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const goGenerarFacturas = () => {
-    navigate('/generar-facturas');
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   const goRegistro = () => {
     navigate('/registrar');
@@ -58,7 +49,6 @@ export default function Header() {
           </h1>
         </div>
         <div className="flex items-center gap-3">
-          {/* REGISTRAR USUARIO - SOLO PARA rol === 1 */}
           {rol === 1 && location.pathname !== "/registrar" && (
             <button
               onClick={goRegistro}
@@ -81,26 +71,6 @@ export default function Header() {
 
       </div>
 
-      {location.pathname === "/historial-presupuestos" && (
-        <button
-          onClick={goGenerarPresupuestos}
-          className="cursor-pointer fixed bottom-6 right-6 sm:bottom-8 sm:right-8 flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 sm:py-3.5 rounded-full bg-[#345A35] text-white shadow-xl hover:shadow-2xl hover:scale-105 hover:from-[#345A35] hover:to-[#2a4620] transition-all duration-300 font-medium text-sm z-50"
-        >
-          <BookText className="w-5 h-5 flex-shrink-0" />
-          <span className="hidden sm:inline">Generar Presupuestos</span>
-        </button>
-      )}
-
-      {/* Botón flotante de facturas */}
-      {location.pathname === '/historial-facturas' && (
-        <button
-          onClick={goGenerarFacturas}
-          className="cursor-pointer fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-3 rounded-full bg-[#A1C084] text-[#345A35] shadow-lg hover:bg-[#345A35] hover:text-[#F3EBD8] transition-colors text-sm"
-        >
-          <BookText className="w-5 h-5 text-white" />
-          <span className="hidden sm:inline font-medium text-sm text-white">Generar Facturas</span>
-        </button>
-      )}
     </header>
   )
 }

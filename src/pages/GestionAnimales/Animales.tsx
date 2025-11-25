@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Trash2, SquarePen, ClipboardList } from "lucide-react";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import Swal from "sweetalert2";
 
 // Tipos

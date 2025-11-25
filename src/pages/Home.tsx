@@ -1,4 +1,4 @@
-import { FileText, PawPrint, ShoppingCart, DollarSign } from "lucide-react";
+import { FileText, ShoppingCart, DollarSign, PiggyBank } from "lucide-react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 
@@ -37,14 +37,14 @@ export default function Home() {
 
         {/* Animales */}
         <Link
-          to="/animales"
+          to="/gestion-animales"
           className="
             flex flex-col items-center justify-center bg-[#A1C084] border-2 border-[#345A35]
             rounded-lg p-6 md:p-12 min-h-[180px] md:min-h-[220px]
             hover:bg-[#345A35] hover:text-[#F3EBD8] transition-all group
           "
         >
-          <PawPrint className="w-12 h-12 md:w-16 md:h-16 text-[#345A35] mb-4 group-hover:text-[#F3EBD8]" />
+          <PiggyBank className="w-12 h-12 md:w-16 md:h-16 text-[#345A35] mb-4 group-hover:text-[#F3EBD8]" />
           <h2 className="text-xl md:text-2xl font-semibold">Gestión de animales</h2>
         </Link>
 

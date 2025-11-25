@@ -151,25 +151,25 @@ export default function GenerarFacturas() {
   return (
     <>
       <Header />
-      <div className="min-h-screen w-full bg-[#F3EBD8] flex flex-col justify-start items-center p-6 md:p-8">
-        <div className="w-full max-w-4xl">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#345A35] to-[#2a4a2b] bg-clip-text text-transparent mb-8 flex items-center gap-3">
+      <div className="w-full bg-[#F3EBD8] flex flex-col justify-start items-center p-6">
+        <div className="w-full max-w-3xl">
+          <h1 className="text-3xl text-center font-bold bg-gradient-to-r from-[#345A35] to-[#2a4a2b] bg-clip-text text-transparent mb-4 flex items-center gap-3">
             <FileText size={36} className="text-[#345A35]" />
             Generar Facturas
           </h1>
 
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+          <div className="bg-white rounded-2xl shadow-lg p-5 border border-gray-100">
             {/* Tipo */}
-            <div className="mb-6">
+            <div className="mb-4">
               <label className="block mb-2 font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <BanknoteArrowUp size={18} className="text-[#A1C084]" /> Tipo de factura
               </label>
               <select
                 value={factura.tipo}
                 onChange={(e) => setFactura({ ...factura, tipo: e.target.value })}
-                className="border-2 border-gray-200 focus:border-[#A1C084] focus:ring-2 focus:ring-[#A1C084]/30 rounded-xl px-4 py-3 w-full outline-none"
+                className="border-2 border-gray-200 focus:border-[#A1C084] focus:ring-2 focus:ring-[#A1C084]/30 rounded-xl px-4 py-3 w-full outline-none cursor-pointer"
               >
-                <option value="">Seleccionar tipo</option>
+                <option value="" disabled>Seleccionar tipo</option>
                 <option value="Factura A">Factura A</option>
                 <option value="Factura B">Factura B</option>
                 <option value="Factura C">Factura C</option>
@@ -177,27 +177,27 @@ export default function GenerarFacturas() {
             </div>
 
             {/* Fecha */}
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700 text-sm flex items-center gap-2">
+            <div className="mb-4">
+              <label className="block mb-2 font-semibold text-gray-700 text-sm flex items-center gap-2v ">
                 <Calendar size={18} className="text-[#A1C084]" /> Fecha de Emisión
               </label>
               <input
                 type="date"
                 value={factura.fecha}
                 onChange={(e) => setFactura({ ...factura, fecha: e.target.value })}
-                className="border-2 border-gray-200 focus:border-[#A1C084] focus:ring-2 focus:ring-[#A1C084]/30 rounded-xl px-4 py-3 w-full outline-none"
+                className="border-2 border-gray-200 focus:border-[#A1C084] focus:ring-2 focus:ring-[#A1C084]/30 rounded-xl px-4 py-3 w-full outline-none cursor-pointer"
               />
             </div>
 
             {/* Presupuesto Asociado */}
-            <div className="mb-8">
+            <div className="mb-4">
               <label className="block mb-2 font-semibold text-gray-700 text-sm">Presupuesto Asociado</label>
               <select
                 value={factura.id_presupuesto}
                 onChange={handlePresupuestoChange}
-                className="border-2 border-gray-200 focus:border-[#A1C084] focus:ring-2 focus:ring-[#A1C084]/30 rounded-xl px-4 py-3 w-full outline-none"
+                className="border-2 border-gray-200 focus:border-[#A1C084] focus:ring-2 focus:ring-[#A1C084]/30 rounded-xl px-4 py-3 w-full outline-none cursor-pointer"
               >
-                <option value="">Seleccionar presupuesto</option>
+                <option value="" disabled>Seleccionar presupuesto</option>
                 {presupuestos.map((p) => (
                   <option key={p.id_presupuesto} value={p.id_presupuesto}>
                     #{p.id_presupuesto} - {p.cliente?.nombre} {p.cliente?.apellido} (${p.importe_total.toLocaleString("es-AR")})
@@ -209,7 +209,7 @@ export default function GenerarFacturas() {
             </div>
 
             {/* Importe */}
-            <div className="mb-8">
+            <div className="mb-4">
               <label className="block mb-2 font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <DollarSign size={18} className="text-[#A1C084]" /> Importe Total
               </label>

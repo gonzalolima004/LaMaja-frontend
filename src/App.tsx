@@ -3,11 +3,11 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import RestablecerContraseña from "./pages/RestablecerContraseña";
 import Home from './pages/Home'
-import Animales from './pages/Animales'
+import GestionAnimales from './pages/GestionAnimales/GestionAnimales';
 import Cobros from './pages/Cobros'
 import Presupuestos from './pages/HistorialPresupuestos'
 import GenerarPresupuestos from './pages/GenerarPresupuestos/GenerarPresupuestos'
-import Facturas from './pages/Facturas'
+import Facturas from './pages/HistorialFacturas'
 import GenerarFacturas from './pages/GenerarFactura'
 
 import VerificadorToken from './services/VerificadorToken'
@@ -29,7 +29,7 @@ const App: React.FC = () => {
 
           {/* rutas accesibles por cualquier rol */}
           <Route path="/home" element={<Home />} />
-          <Route path="/animales" element={<Animales />} />
+          <Route path="/gestion-animales" element={<GestionAnimales />} />
 
 
           {/* Rutas protegidas solo para rol encargado */}

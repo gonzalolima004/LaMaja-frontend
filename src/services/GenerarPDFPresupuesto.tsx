@@ -137,13 +137,13 @@ export const GenerarPDFPresupuesto = (presupuesto: any) => {
 
   // === Total ===
   doc.setFillColor(52, 90, 53);
-  doc.roundedRect(doc.internal.pageSize.getWidth() - margin - 70, finalY + 12, 70, 15, 3, 3, "F");
+  doc.roundedRect(doc.internal.pageSize.getWidth() - margin - 60, finalY + 12, 70, 15, 3, 3, "F");
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(13);
   doc.setTextColor(255, 255, 255);
   doc.text(
-    `TOTAL: $${presupuesto.importe_total.toLocaleString("es-AR")}`,
+    `Total: $${presupuesto.importe_total.toLocaleString("es-AR")}`,
     doc.internal.pageSize.getWidth() - margin - 5,
     finalY + 22,
     { align: "right" }

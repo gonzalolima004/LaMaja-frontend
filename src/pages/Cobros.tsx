@@ -141,8 +141,7 @@ export default function Cobros() {
           <p className="text-[#345A35]">Procesa el pago de la factura de venta</p>
           <button
             onClick={abrirHistorialCobros}
-            className="text-white px-4 py-2 rounded-md hover:opacity-90"
-            style={{ backgroundColor: '#A1C084' }}
+            className="bg-[#345A35] text-white px-4 py-2 rounded cursor-pointer transition hover:bg-[#2a4a2b] hover:scale-[1.05]"
           >
             Ver Historial de Pagos
           </button>
@@ -150,13 +149,13 @@ export default function Cobros() {
 
         {/* SELECCIÓN DE FACTURA */}
         <div className="mb-8">
-          <label className="block text-lg font-semibold mb-2 text-[#A1C084]">
+          <label className="block text-lg font-semibold mb-2 text-[#345A35]">
             Seleccionar factura:
           </label>
           <select
             onChange={(e) => handleFacturaSelect(Number(e.target.value))}
             value={facturaSeleccionada?.id_factura_venta || ''}
-            className="p-3 rounded-md w-full border focus:outline-none"
+            className="p-3 rounded-md w-full border focus:outline-none bg-white"
             style={{ borderColor: '#345A35' }}
           >
             <option value=""> Seleccioná una factura </option>
@@ -286,8 +285,7 @@ export default function Cobros() {
 
                   <button
                     onClick={handleCobro}
-                    className="mt-5 w-full py-2 rounded-md font-semibold text-white hover:opacity-90"
-                    style={{ backgroundColor: '#345A35' }}
+                    className="w-full bg-[#345A35] mt-7.5 text-white p-3 rounded cursor-pointer transition hover:bg-[#2a4a2b] hover:scale-[1.05]"
                   >
                     Confirmar Cobro
                   </button>

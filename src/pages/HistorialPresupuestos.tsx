@@ -4,10 +4,14 @@ import { Trash2, FileText } from "lucide-react";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
 import { GenerarPDFPresupuesto } from "../services/GenerarPDFPresupuesto";
+import { useNavigate } from "react-router-dom";
+import { BookText } from "lucide-react";
 
 export default function HistorialPresupuestos() {
   const [presupuestos, setPresupuestos] = useState<any[]>([]);
   const [nombresClientes, setNombresClientes] = useState<{ [id: number]: string }>({});
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const obtenerPresupuestos = async () => {
@@ -68,6 +72,11 @@ export default function HistorialPresupuestos() {
     });
   };
 
+  const goGenerarPresupuestos = () => {
+    navigate("/generar-presupuestos")
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       <Header />
@@ -78,6 +87,12 @@ export default function HistorialPresupuestos() {
               <h2 className="text-xl sm:text-3xl font-semibold text-white text-center sm:text-left w-full">
                 Historial de presupuestos
               </h2>
+              <button
+                onClick={goGenerarPresupuestos}
+                className=" cursor-pointer flex items-center gap-2 sm:gap-2.5 flex-shrink-0 px-3 py-2.5 sm:px-4 sm:py-3 bg-[#A1C084] text-[#345A35] rounded-lg border border-[#A1C084] hover:bg-[#345A35] hover:border-white hover:shadow-lg transition-all duration-200 active:scale-95 text-sm sm:text-base font-medium">
+                <BookText className="w-5 h-5 text-white font-bold" />
+                <span className="hidden sm:inline text-sm text-white font-bold">Generar Presupuestos</span>
+              </button>
             </div>
 
             <div className="w-full overflow-x-auto">

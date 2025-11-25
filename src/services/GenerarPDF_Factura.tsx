@@ -151,7 +151,7 @@ export const generarPDFFactura = (factura: any) => {
 
     currentY += 10;
 
-    const tableColumn = ["ID Presupuesto", "Importe Total", "Fecha"];
+    const tableColumn = ["N° de Presupuesto", "Importe Total", "Fecha"];
     const tableRows = [
       [
         presupuesto.id_presupuesto,
@@ -197,7 +197,7 @@ export const generarPDFFactura = (factura: any) => {
   doc.setFontSize(13);
   doc.setTextColor(255, 255, 255);
   doc.text(
-    `TOTAL FACTURADO: $${factura.importe_total.toLocaleString("es-AR")}`,
+    `Total facturado: $${factura.importe_total.toLocaleString("es-AR")}`,
     doc.internal.pageSize.getWidth() - margin - 5,
     currentY + 20,
     { align: "right" }

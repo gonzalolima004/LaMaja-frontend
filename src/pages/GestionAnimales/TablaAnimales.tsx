@@ -1,4 +1,8 @@
 import { Trash2, SquarePen, ClipboardList } from "lucide-react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 export default function TablaAnimales(props: any) {
     const { animales, onEliminar, onEditar, onVerProcedimientos } = props;
@@ -40,7 +44,7 @@ export default function TablaAnimales(props: any) {
                             {a.estado}
                         </td>
                         <td className="p-2 text-center">
-                            {new Date(a.fecha_nacimiento).toLocaleDateString("es-ES")}
+                            {dayjs.utc(a.fecha_nacimiento).format("DD/MM/YYYY")}
                         </td>
                         <td className="p-2 text-center">{a.vacunado ? "Sí" : "No"}</td>
                         <td className="p-2 text-center">

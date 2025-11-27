@@ -1,17 +1,24 @@
 import { useState, useEffect } from "react";
 import api from "../services/api";
-import { Trash2, FileText } from "lucide-react";
+import { Trash2, FileText, BookText, ChevronLeft, ChevronRight } from "lucide-react";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
 import { GenerarPDFPresupuesto } from "../services/GenerarPDFPresupuesto";
 import { useNavigate } from "react-router-dom";
-import { BookText } from "lucide-react";
+import dayjs from "dayjs";
+import utc from "dayjs";
+
+dayjs.extend(utc);
 
 export default function HistorialPresupuestos() {
   const [presupuestos, setPresupuestos] = useState<any[]>([]);
   const [nombresClientes, setNombresClientes] = useState<{ [id: number]: string }>({});
-  const navigate = useNavigate();
+  const [fechaFiltro, setFechaFiltro] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
+  const presupuestosPorPagina = 5;
 
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const obtenerPresupuestos = async () => {
@@ -73,9 +80,36 @@ export default function HistorialPresupuestos() {
   };
 
   const goGenerarPresupuestos = () => {
-    navigate("/generar-presupuestos")
+    navigate("/generar-presupuestos");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+
+  function toLocalDateString(fechaISO: string) {
+    return dayjs.utc(fechaISO).format("YYYY-MM-DD");
+  }
+
+  const presupuestosFiltrados = presupuestos.filter((p) => {
+    if (!fechaFiltro) return true;
+
+    const fechaLocal = toLocalDateString(p.fecha);
+
+    return fechaLocal === fechaFiltro;
+  });
+
+  const indexUltimo = paginaActual * presupuestosPorPagina;
+  const indexPrimero = indexUltimo - presupuestosPorPagina;
+
+  const presupuestosPaginados = presupuestosFiltrados.slice(indexPrimero, indexUltimo);
+
+  const totalPaginas = Math.ceil(presupuestosFiltrados.length / presupuestosPorPagina);
+
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [fechaFiltro]);
+
+
+
 
   return (
     <>
@@ -83,18 +117,62 @@ export default function HistorialPresupuestos() {
       <div className="min-h-screen bg-[#F3EBD8] p-3 sm:p-6">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="bg-[#345A35] px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center">
-              <h2 className="text-xl sm:text-3xl font-semibold text-white text-center sm:text-left w-full">
+
+            {/* HEADER CON FILTRO */}
+            <div className="bg-[#345A35] px-4 py-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row justify-between items-center gap-6">
+
+              <h2 className="text-xl sm:text-3xl font-semibold text-white w-full">
                 Historial de presupuestos
               </h2>
-              <button
-                onClick={goGenerarPresupuestos}
-                className=" cursor-pointer flex items-center gap-2 sm:gap-2.5 flex-shrink-0 px-3 py-2.5 sm:px-4 sm:py-3 bg-[#A1C084] text-[#345A35] rounded-lg border border-[#A1C084] hover:bg-[#345A35] hover:border-white hover:shadow-lg transition-all duration-200 active:scale-95 text-sm sm:text-base font-medium">
-                <BookText className="w-5 h-5 text-white font-bold" />
-                <span className="hidden sm:inline text-sm text-white font-bold">Generar Presupuestos</span>
-              </button>
+
+              <div className="flex items-end gap-4">
+                {fechaFiltro && (
+                  <button
+                    onClick={() => setFechaFiltro("")}
+                    className="text-white font-semibold px-5 h-[42px] whitespace-nowrap underline hover:scale-[1.05] cursor-pointer">
+                    Ver todos
+                  </button>
+                )}
+
+
+                <div className="flex flex-col">
+                  <label className="text-xs font-semibold text-white mb-1 text-center">
+                    Filtrar por fecha
+                  </label>
+
+                  <div className="relative h-[42px]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-5 h-5 text-[#345A35] absolute left-3 top-1/2 -translate-y-1/2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v11a2 2 0 002 2z" />
+                    </svg>
+
+                    <input
+                      type="date"
+                      value={fechaFiltro}
+                      onChange={(e) => setFechaFiltro(e.target.value)}
+                      className="bg-[#A1C084] text-[#345A35] font-semibold pl-11 pr-3 h-full rounded-lg border border-[#A1C084] shadow-md w-48 hover:bg-[#8fb571] hover:border-white hover:text-white transition-all duration-200 active:scale-95 cursor-pointer"
+                    />
+                  </div>
+                </div>
+
+
+
+                <button
+                  onClick={goGenerarPresupuestos}
+                  className="cursor-pointer flex items-center gap-2 px-4 h-[42px] bg-[#A1C084] text-[#345A35] rounded-lg border border-[#A1C084] shadow-md font-semibold hover:bg-[#345A35] hover:text-white hover:border-white hover:shadow-lg transition-all duration-200 active:scale-95 whitespace-nowrap transition-all duration-200">
+                  <BookText className="w-5 h-5 text-white hover:text-white transition-all font-bold" />
+                  Generar Presupuestos
+                </button>
+
+              </div>
             </div>
 
+            {/* TABLA */}
             <div className="w-full overflow-x-auto">
               <table className="min-w-full lg:w-full text-center text-white text-sm sm:text-base table-auto">
                 <thead className="bg-[#A1C084]">
@@ -109,49 +187,85 @@ export default function HistorialPresupuestos() {
                 </thead>
 
                 <tbody className="bg-[#A1C084] divide-y divide-gray-200 font-bold">
-                  {presupuestos.map((p, index) => (
+                  {presupuestosPaginados.map((p) => (
                     <tr key={p.id_presupuesto}>
-                      <td className="px-2 py-2 sm:px-4 sm:py-4">{index + 1}</td>
+                      <td className="px-2 py-2 sm:px-4 sm:py-4">{p.id_presupuesto}</td>
+
                       <td className="px-2 py-2 sm:px-4 sm:py-4">
                         {nombresClientes[p.id_cliente] || "Cargando..."}
                       </td>
+
                       <td className="px-2 py-2 sm:px-4 sm:py-4">
                         ${p.importe_total}
                       </td>
+
                       <td className="px-2 py-2 sm:px-4 sm:py-4">
-                        {new Date(p.fecha).toLocaleDateString("es-AR")}
+                        {dayjs.utc(p.fecha).format("DD/MM/YYYY")}
                       </td>
+
                       <td className="px-2 py-2 sm:px-4 sm:py-4 flex justify-center">
                         <button
                           onClick={() => GenerarPDFPresupuesto(p)}
-                          className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-md flex items-center text-xs sm:text-sm"
+                          className="
+                            cursor-pointer bg-blue-500 hover:bg-blue-600
+                            text-white px-2 py-1 rounded-md flex items-center
+                            text-xs sm:text-sm
+                          "
                         >
                           <FileText className="w-4 h-4 mr-1" />
                           PDF
                         </button>
                       </td>
+
                       <td className="px-2 py-2 sm:px-4 sm:py-4">
                         <button
                           onClick={() => eliminarPresupuesto(p.id_presupuesto)}
-                          className="cursor-pointer text-red-700 bg-red-100 hover:bg-red-200 px-2 py-1 rounded-md inline-flex items-center text-xs sm:text-sm"
+                          className="
+                            cursor-pointer text-red-700 bg-red-100 hover:bg-red-200
+                            px-2 py-1 rounded-md inline-flex items-center
+                            text-xs sm:text-sm
+                          "
                         >
                           <Trash2 className="w-4 h-4 mr-1" />
                           Eliminar
                         </button>
                       </td>
+
                     </tr>
                   ))}
                 </tbody>
               </table>
+
+              <div className="flex justify-center items-center gap-3 py-4 bg-[#F3EBD8]">
+
+                <button
+                  disabled={paginaActual === 1}
+                  onClick={() => setPaginaActual(paginaActual - 1)}
+                  className="px-3 py-2 bg-[#A1C084] text-[#345A35] hover:bg-[#345a35] hover:text-white transition-all duration-200 rounded disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+
+                <span className="font-semibold text-[#345A35]">
+                  {paginaActual} / {totalPaginas || 1}
+                </span>
+
+                <button
+                  disabled={paginaActual === totalPaginas}
+                  onClick={() => setPaginaActual(paginaActual + 1)}
+                  className="px-3 py-2 bg-[#A1C084] text-[#345A35] hover:bg-[#345a35] hover:text-white transition-all duration-200  rounded disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+                >
+                  <ChevronRight size={20} />
+                </button>
+
+              </div>
+
+
             </div>
 
           </div>
         </div>
       </div>
-
-
-
-
     </>
   );
-};
+}

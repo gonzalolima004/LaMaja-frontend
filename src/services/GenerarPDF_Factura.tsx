@@ -203,5 +203,6 @@ export const generarPDFFactura = (factura: any) => {
     { align: "right" }
   );
 
-  doc.save(`factura_${factura.id_factura_venta}.pdf`);
+  doc.save(`factura_${factura.presupuesto.cliente.nombre}_${factura.presupuesto.cliente.apellido}.pdf`);
+
 };

@@ -1,8 +1,12 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { SquarePen } from "lucide-react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+// Configurar el plugin UTC
+dayjs.extend(utc);
 
 export default function FormularioAnimal(props: any) {
   const { animalEditando, onAnimalGuardado } = props;
@@ -11,7 +15,7 @@ export default function FormularioAnimal(props: any) {
       sexo: "",
       peso: "",
       estado: "",
-      fecha_nacimiento: new Date(),
+      fecha_nacimiento: dayjs().format("YYYY-MM-DD"),
       vacunado: false,
     }
   );
@@ -21,7 +25,8 @@ export default function FormularioAnimal(props: any) {
       setFormData({
         ...animalEditando,
         peso: Number(animalEditando.peso),
-        fecha_nacimiento: new Date(animalEditando.fecha_nacimiento),
+        // ✅ Convertir fecha UTC a formato YYYY-MM-DD para el input
+        fecha_nacimiento: dayjs.utc(animalEditando.fecha_nacimiento).format("YYYY-MM-DD"),
       });
     }
   }, [animalEditando]);
@@ -31,9 +36,8 @@ export default function FormularioAnimal(props: any) {
 
     if (type === "checkbox") {
       setFormData({ ...formData, [name]: e.target.checked });
-    } else if (name === "fecha_nacimiento") {
-      setFormData({ ...formData, fecha_nacimiento: new Date(value) });
     } else {
+      // ✅ Para fecha, simplemente guardar el valor YYYY-MM-DD del input
       setFormData({ ...formData, [name]: value });
     }
   };
@@ -46,14 +50,20 @@ export default function FormularioAnimal(props: any) {
     }
 
     try {
+      // ✅ Enviar la fecha en formato ISO con hora al mediodía
+      const dataToSend = {
+        ...formData,
+        fecha_nacimiento: `${formData.fecha_nacimiento}T12:00:00`,
+      };
+
       if (animalEditando) {
         await axios.put(
           `http://localhost:3001/api/animales/${animalEditando.id_animal}`,
-          formData
+          dataToSend
         );
         Swal.fire("Actualizado", "Animal actualizado", "success");
       } else {
-        await axios.post("http://localhost:3001/api/animales", formData);
+        await axios.post("http://localhost:3001/api/animales", dataToSend);
         Swal.fire("Registrado", "Animal registrado", "success");
       }
 
@@ -62,19 +72,12 @@ export default function FormularioAnimal(props: any) {
         sexo: "",
         peso: "",
         estado: "",
-        fecha_nacimiento: new Date(),
+        fecha_nacimiento: dayjs().format("YYYY-MM-DD"),
         vacunado: false,
       });
     } catch {
       Swal.fire("Error", "Error al guardar", "error");
     }
-  };
-
-  const formatDateInput = (date: any) => {
-    const d = date.getDate().toString().padStart(2, "0");
-    const m = (date.getMonth() + 1).toString().padStart(2, "0");
-    const y = date.getFullYear();
-    return `${y}-${m}-${d}`;
   };
 
   return (
@@ -138,8 +141,8 @@ export default function FormularioAnimal(props: any) {
           <input
             name="fecha_nacimiento"
             type="date"
-            max={new Date().toISOString().split("T")[0]}
-            value={formatDateInput(formData.fecha_nacimiento)}
+            max={dayjs().format("YYYY-MM-DD")}
+            value={formData.fecha_nacimiento}
             onChange={handleChange}
             className="p-2 border rounded cursor-pointer"
           />
@@ -159,12 +162,11 @@ export default function FormularioAnimal(props: any) {
 
       {/* BOTÓN */}
       <button
-  type="submit"
-  className="mt-4 bg-[#345A35] text-white px-6 py-2 rounded flex items-center gap-2 cursor-pointer transition hover:bg-[#2a4a2b] hover:scale-[1.02]"
->
-  {animalEditando ? <><SquarePen size={18}/> Actualizar</> : "Guardar"}
-</button>
-
+        type="submit"
+        className="mt-4 bg-[#345A35] text-white px-6 py-2 rounded flex items-center gap-2 cursor-pointer transition hover:bg-[#2a4a2b] hover:scale-[1.02]"
+      >
+        {animalEditando ? <><SquarePen size={18}/> Actualizar</> : "Guardar"}
+      </button>
     </form>
   );
 }

@@ -2,6 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Trash2 } from "lucide-react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 export default function ProcedimientosModal(props: any) {
     const { animal, onClose } = props;
@@ -99,8 +103,9 @@ export default function ProcedimientosModal(props: any) {
                             className="flex justify-between items-center bg-[#f8f8f8] p-2 rounded border"
                         >
                             <span>
-                                <strong>{new Date(p.fecha).toLocaleDateString("es-ES")}:</strong> {p.tipo}
+                                {dayjs.utc(p.fecha).format("DD/MM/YYYY")}
                             </span>
+                             <span className="text-gray-700">{p.tipo}</span>
 
                             <button
                                 onClick={() => eliminarProcedimiento(p.id_procedimiento_veterinario)}

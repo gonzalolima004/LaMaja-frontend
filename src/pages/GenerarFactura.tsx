@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { FileText, Calendar, DollarSign, FilePlus2, BanknoteArrowUp } from "lucide-react";
 import api from "../services/api";
-import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import dayjs from "dayjs";
 
 export default function GenerarFacturas() {
-  const navigate = useNavigate();
   const [presupuestos, setPresupuestos] = useState<any[]>([]);
   const [presupuestoSeleccionado, setPresupuestoSeleccionado] = useState<any | null>(null);
   const [totalFacturado, setTotalFacturado] = useState<number>(0);
@@ -81,50 +79,47 @@ export default function GenerarFacturas() {
     }
   };
 
-  // 🔹 Crear factura con validaciones
   const handleSubmit = async () => {
-    if (!factura.tipo || !factura.fecha || !factura.importe_total || !factura.id_presupuesto) {
-      return showAlert("Atención", "Complete todos los campos de la factura", "warning");
-    }
+  if (!factura.tipo || !factura.fecha || !factura.importe_total || !factura.id_presupuesto) {
+    return showAlert("Atención", "Complete todos los campos de la factura", "warning");
+  }
 
-    const importe = parseInt(factura.importe_total);
-    if (isNaN(importe) || importe <= 0) {
-      return showAlert("Error", "Ingrese un importe válido mayor a 0", "error");
-    }
+  const importe = parseInt(factura.importe_total);
+  if (isNaN(importe) || importe <= 0) {
+    return showAlert("Error", "Ingrese un importe válido mayor a 0", "error");
+  }
 
-    // ✅ Validar que no supere el restante del presupuesto
-    if (importe > restante) {
-      return showAlert("Error", `El importe supera el restante disponible ($${restante.toLocaleString("es-AR")})`, "error");
-    }
+  if (importe > restante) {
+    return showAlert("Error", `El importe supera el restante disponible ($${restante.toLocaleString("es-AR")})`, "error");
+  }
 
-    try {
-      const body = {
-        tipo: factura.tipo,
-        fecha: factura.fecha,
-        importe_total: importe,
-        id_presupuesto: parseInt(factura.id_presupuesto),
-      };
+  try {
+    const body = {
+      tipo: factura.tipo,
+      // ✅ Solución: enviar fecha con hora local a mediodía
+      fecha: `${factura.fecha}T12:00:00`,
+      importe_total: importe,
+      id_presupuesto: parseInt(factura.id_presupuesto),
+    };
 
-      await api.post("/facturas_venta", body);
-      showAlert("Éxito", "Factura generada correctamente", "success");
+    await api.post("/facturas_venta", body);
+    showAlert("Éxito", "Factura generada correctamente", "success");
 
-      setTimeout(() => navigate("/facturas"), 1500);
-
-      // Reiniciar campos
-      setFactura({
-        tipo: "",
-        fecha: dayjs().format("YYYY-MM-DD"),
-        importe_total: "",
-        id_presupuesto: "",
-      });
-      setPresupuestoSeleccionado(null);
-      setTotalFacturado(0);
-      setRestante(0);
-    } catch (error) {
-      console.error(error);
-      showAlert("Error", "No se pudo generar la factura", "error");
-    }
-  };
+    // Reiniciar campos
+    setFactura({
+      tipo: "",
+      fecha: dayjs().format("YYYY-MM-DD"),
+      importe_total: "",
+      id_presupuesto: "",
+    });
+    setPresupuestoSeleccionado(null);
+    setTotalFacturado(0);
+    setRestante(0);
+  } catch (error) {
+    console.error(error);
+    showAlert("Error", "No se pudo generar la factura", "error");
+  }
+};
 
   // 🔹 Mostrar datos del presupuesto
   const renderResumen = () => {

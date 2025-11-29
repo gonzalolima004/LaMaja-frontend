@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
-import HistorialCobrosModal from "./HistorialCobrosModal";
 
-// Tipos compactos
 type Cliente = { nombre: string; apellido: string; dni: string; direccion: string };
 type Presupuesto = { id_presupuesto: number; importe_total: number; fecha: string; cliente?: Cliente };
 type Factura = {
@@ -21,15 +19,12 @@ const METODOS = [
   { id: 3, nombre: "Transferencia Bancaria" },
 ];
 
-export default function Cobros() {
+export default function CargarCobros() {
   const [facturas, setFacturas] = useState<Factura[]>([]);
   const [cobros, setCobros] = useState<any[]>([]); // ⬅ se agregan cobros
   const [factura, setFactura] = useState<Factura | null>(null);
   const [metodo, setMetodo] = useState<number | null>(null);
   const [titular, setTitular] = useState("");
-  const [modal, setModal] = useState(false);
-  const [historial, setHistorial] = useState<any[]>([]);
-  const [filtro, setFiltro] = useState<number | "Todos">("Todos");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,12 +38,11 @@ export default function Cobros() {
     fetchData();
   }, []);
 
-  // IDs de facturas que ya están cobradas
   const facturasCobradasIds = cobros.map((c) => c.id_factura_venta);
 
   const cobrar = async () => {
     if (!factura || !metodo)
-      return Swal.fire("Faltan datos", "Selecciona factura y método de pago", "warning");
+      return Swal.fire("Faltan datos", "Selecciona método de pago", "warning");
 
     try {
       const res = await axios.post("http://localhost:3001/api/cobros", {
@@ -60,7 +54,6 @@ export default function Cobros() {
 
       Swal.fire("Cobro registrado", res.data.mensaje, "success");
 
-      // Reseteo
       setFactura(null);
       setMetodo(null);
       setTitular("");
@@ -72,26 +65,15 @@ export default function Cobros() {
     }
   };
 
-  const abrirHistorial = async () => {
-    const res = await axios.get("http://localhost:3001/api/cobros");
-    setHistorial(res.data);
-    setModal(true);
-  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F3EBD8" }}>
       <Header />
 
       <div className="max-w-6xl mx-auto px-6 py-10">
-        <div className="flex justify-between mb-6">
-          <h1 className="text-4xl font-bold text-[#345A35]">Gestión de Cobros</h1>
-          <button
-            onClick={abrirHistorial}
-            className="bg-[#345A35] text-white px-4 py-2 rounded cursor-pointer"
-          >
-            Ver historial de cobros
-          </button>
-        </div>
+
+        <h1 className="text-3xl font-bold text-[#345A35] mb-6">Cargar un nuevo cobro</h1>
+        
 
         {/* SELECT FACTURA */}
         <select
@@ -204,15 +186,6 @@ export default function Cobros() {
         )}
       </div>
 
-
-      {modal && (
-        <HistorialCobrosModal
-          historial={historial}
-          filtro={filtro}
-          setFiltro={setFiltro}
-          onClose={() => setModal(false)}
-        />
-      )}
     </div>
   );
 }

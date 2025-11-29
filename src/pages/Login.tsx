@@ -50,7 +50,7 @@ const Login: React.FC = () => {
       await api.post("/usuarios/recuperar", { email: emailRecuperacion });
       Swal.fire(
         "Correo enviado",
-        "Si el email existe en nuestra base de datos, recibirás un mensaje con instrucciones para restablecer tu contraseña.",
+        "Si el email pertenece a una cuenta válida y está registrado en nuestro sistema, recibirás un correo con instrucciones para restablecer tu contraseña.",
         "success"
       );
       setMostrarModal(false);
@@ -143,13 +143,13 @@ const Login: React.FC = () => {
             <div className="flex justify-around">
               <button
                 onClick={handleRecuperarContrasena}
-                className="bg-[#345A35] text-[#F3EBD8] px-4 py-2 rounded-full hover:bg-[#4C704D] transition-colors"
+                className="bg-[#345A35] text-[#F3EBD8] px-4 py-2 rounded-full hover:bg-[#4C704D] transition-colors cursor-pointer"
               >
                 Enviar
               </button>
               <button
                 onClick={() => setMostrarModal(false)}
-                className="bg-[#A1C084] text-[#345A35] px-4 py-2 rounded-full hover:bg-[#B6D69C] transition-colors"
+                className="bg-[#A1C084] text-[#345A35] px-4 py-2 rounded-full hover:bg-[#B6D69C] transition-colors cursor-pointer"
               >
                 Cancelar
               </button>

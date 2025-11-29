@@ -21,16 +21,24 @@ export default function HistorialPresupuestos() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const obtenerPresupuestos = async () => {
-      try {
-        const res = await api.get(`/presupuestos`);
-        setPresupuestos(res.data);
-      } catch (error) {
-        console.error("Error al obtener los presupuestos:", error);
-      }
-    };
-    obtenerPresupuestos();
-  }, []);
+  const obtenerPresupuestos = async () => {
+    try {
+      const res = await api.get(`/presupuestos`);
+
+      // ORDENAR LOS ÚLTIMOS PRIMERO
+      const ordenados = res.data.sort(
+        (a: any, b: any) => b.id_presupuesto - a.id_presupuesto
+      );
+
+      setPresupuestos(ordenados);
+
+    } catch (error) {
+      console.error("Error al obtener los presupuestos:", error);
+    }
+  };
+  obtenerPresupuestos();
+}, []);
+
 
   useEffect(() => {
     const fetchNombresClientes = async () => {
@@ -141,21 +149,12 @@ export default function HistorialPresupuestos() {
                   </label>
 
                   <div className="relative h-[42px]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5 text-[#345A35] absolute left-3 top-1/2 -translate-y-1/2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v11a2 2 0 002 2z" />
-                    </svg>
 
                     <input
                       type="date"
                       value={fechaFiltro}
                       onChange={(e) => setFechaFiltro(e.target.value)}
-                      className="bg-[#A1C084] text-[#345A35] font-semibold pl-11 pr-3 h-full rounded-lg border border-[#A1C084] shadow-md w-48 hover:bg-[#8fb571] hover:border-white hover:text-white transition-all duration-200 active:scale-95 cursor-pointer"
+                      className="bg-[#A1C084] text-[#345A35] font-semibold pl-5 pr-3 h-full rounded-lg border border-[#A1C084] shadow-md w-48 hover:bg-[#8fb571] hover:border-white hover:text-white transition-all duration-200 active:scale-95 cursor-pointer"
                     />
                   </div>
                 </div>

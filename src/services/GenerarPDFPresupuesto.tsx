@@ -149,5 +149,5 @@ export const GenerarPDFPresupuesto = (presupuesto: any) => {
     { align: "right" }
   );
 
-  doc.save(`presupuesto_${cliente.nombre}_${cliente.apellido}.pdf`);
+  doc.save(`presupuesto_N°${presupuesto.id_presupuesto}_${cliente.nombre}_${cliente.apellido}.pdf`);
 };

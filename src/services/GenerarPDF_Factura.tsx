@@ -138,55 +138,110 @@ export const generarPDFFactura = (factura: any) => {
     currentY = (doc as any).lastAutoTable.finalY + 15;
   }
 
-  // === DATOS DEL PRESUPUESTO ===
-  if (factura.presupuesto) {
-    const presupuesto = factura.presupuesto;
+// === DATOS DEL PRESUPUESTO ===
+if (factura.presupuesto) {
+  const presupuesto = factura.presupuesto;
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.setTextColor(52, 90, 53);
-    doc.text("Datos del Presupuesto", doc.internal.pageSize.getWidth() / 2, currentY, {
-      align: "center",
-    });
+  // Calcular totales igual que en tu tabla
+  const totalOriginal = presupuesto.importe_total || 0;
 
-    currentY += 10;
+  const totalFacturado =
+    (presupuesto.facturas || []).reduce(
+      (acc: number, f: any) => acc + (f.importe_total || 0),
+      0
+    ) || 0;
 
-    const tableColumn = ["N° de Presupuesto", "Importe Total", "Fecha"];
-    const tableRows = [
+  const restante = totalOriginal - totalFacturado;
+
+  // Título
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.setTextColor(52, 90, 53);
+  doc.text(
+    "Datos del Presupuesto",
+    doc.internal.pageSize.getWidth() / 2,
+    currentY,
+    { align: "center" }
+  );
+
+  currentY += 10;
+
+  // Tabla con datos básicos del presupuesto
+  autoTable(doc, {
+    startY: currentY,
+    head: [["N° de Presupuesto", "Importe Total", "Fecha"]],
+    body: [
       [
         presupuesto.id_presupuesto,
-        `$${presupuesto.importe_total.toLocaleString("es-AR")}`,
+        `$${totalOriginal.toLocaleString("es-AR")}`,
         new Date(presupuesto.fecha).toLocaleDateString("es-AR"),
       ],
-    ];
+    ],
+    theme: "striped",
+    headStyles: {
+      fillColor: [52, 90, 53],
+      textColor: 255,
+      fontStyle: "bold",
+      fontSize: 11,
+    },
+    bodyStyles: {
+      textColor: [60, 60, 60],
+      fontSize: 10,
+    },
+    margin: { left: margin, right: margin },
+  });
 
-    autoTable(doc, {
-      startY: currentY,
-      head: [tableColumn],
-      body: tableRows,
-      theme: "striped",
-      headStyles: {
-        fillColor: [52, 90, 53],
-        textColor: 255,
-        fontStyle: "bold",
-        fontSize: 11,
-      },
-      bodyStyles: {
-        textColor: [60, 60, 60],
-        fontSize: 10,
-      },
-      margin: { left: margin, right: margin },
-    });
+  currentY = (doc as any).lastAutoTable.finalY + 12;
 
-    currentY = (doc as any).lastAutoTable.finalY + 10;
-  }
+  // ================================
+  //    RESUMEN (original, facturado, restante)
+  // ================================
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.setTextColor(52, 90, 53);
+  doc.text(
+    "Resumen del Presupuesto",
+    doc.internal.pageSize.getWidth() / 2,
+    currentY,
+    { align: "center" }
+  );
+
+  currentY += 10;
+
+  autoTable(doc, {
+    startY: currentY,
+    head: [["Importe Original", "Total Facturado", "Restante por Facturar"]],
+    body: [
+      [
+        `$${totalOriginal.toLocaleString("es-AR")}`,
+        `$${totalFacturado.toLocaleString("es-AR")}`,
+        `$${restante.toLocaleString("es-AR")}`,
+      ],
+    ],
+    theme: "striped",
+    headStyles: {
+      fillColor: [52, 90, 53],
+      textColor: 255,
+      fontStyle: "bold",
+      fontSize: 11,
+    },
+    bodyStyles: {
+      textColor: [60, 60, 60],
+      fontSize: 10,
+    },
+    margin: { left: margin, right: margin },
+  });
+
+  currentY = (doc as any).lastAutoTable.finalY + 15;
+}
+
 
   // === TOTAL ===
   doc.setFillColor(52, 90, 53);
   doc.roundedRect(
-    doc.internal.pageSize.getWidth() - margin - 70,
+    doc.internal.pageSize.getWidth() - margin - 90,
     currentY + 10,
-    70,
+    100,
     15,
     3,
     3,
@@ -197,12 +252,12 @@ export const generarPDFFactura = (factura: any) => {
   doc.setFontSize(13);
   doc.setTextColor(255, 255, 255);
   doc.text(
-    `Total facturado: $${factura.importe_total.toLocaleString("es-AR")}`,
-    doc.internal.pageSize.getWidth() - margin - 5,
+    `Total de esta factura: $${factura.importe_total.toLocaleString("es-AR")}`,
+    doc.internal.pageSize.getWidth() - margin - 2,
     currentY + 20,
     { align: "right" }
   );
 
-  doc.save(`factura_${factura.presupuesto.cliente.nombre}_${factura.presupuesto.cliente.apellido}.pdf`);
+  doc.save(`factura_N°${factura.id_factura_venta}_${factura.presupuesto.cliente.nombre}_${factura.presupuesto.cliente.apellido}.pdf`);
 
 };

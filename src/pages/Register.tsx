@@ -19,18 +19,8 @@ const Register: React.FC = () => {
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!nombre || !apellido || !dni || !email || !contrasena) {
-      Swal.fire("Campos incompletos", "Por favor completa todos los campos.", "warning");
-      return;
-    }
-
-    if (dni.length !== 8) {
-      Swal.fire("DNI inválido", "El DNI debe tener exactamente 8 números.", "warning");
-      return;
-    }
-
-    if (idRol === 2 && !matricula) {
-      Swal.fire("Falta la matrícula", "Debes ingresar la matrícula si el rol es Veterinario.", "warning");
+    if (dni.length !== 7 && dni.length !== 8) {
+      Swal.fire("DNI inválido", "El DNI debe tener 7 u 8 números.", "warning");
       return;
     }
 

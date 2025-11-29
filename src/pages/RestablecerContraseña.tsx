@@ -11,7 +11,7 @@ const RestablecerContraseña = () => {
   const [confirmarContrasena, setConfirmarContrasena] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!nuevaContrasena || !confirmarContrasena) {
@@ -33,7 +33,7 @@ const RestablecerContraseña = () => {
 
       Swal.fire("¡Éxito!", response.data.message, "success");
       navigate("/"); // redirige al login
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error al restablecer contraseña:", err);
       const mensaje =
         err.response?.data?.error || "Error al restablecer la contraseña.";

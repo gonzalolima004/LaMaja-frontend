@@ -66,7 +66,7 @@ export default function Home() {
 
         {/* Cobros */}
         <Link
-          to={restringido ? "#" : "/cobros"}
+          to={restringido ? "#" : "/historial-cobros"}
           className={`
             flex flex-col items-center justify-center rounded-lg p-6 md:p-12
             min-h-[180px] md:min-h-[220px] border-2 transition-all group

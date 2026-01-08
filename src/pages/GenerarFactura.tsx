@@ -146,7 +146,8 @@ export default function GenerarFacturas() {
   return (
     <>
       <Header />
-      <div className="w-full bg-[#F3EBD8] flex flex-col justify-start items-center p-6">
+      <div className="w-full min-h-screen bg-[#F3EBD8] flex flex-col justify-start items-center p-6">
+
         <div className="w-full max-w-3xl">
           <h1 className="text-3xl text-center font-bold bg-gradient-to-r from-[#345A35] to-[#2a4a2b] bg-clip-text text-transparent mb-4 flex items-center gap-3">
             <FileText size={36} className="text-[#345A35]" />

@@ -77,7 +77,8 @@ export default function CargarCobros() {
 
         {/* SELECT FACTURA */}
         <select
-          className="p-3 rounded-md w-full border bg-white cursor-pointer"
+          className="p-3 rounded-md w-full border bg-white cursor-pointer 
+        text-sm sm:text-base"
           style={{ borderColor: "#345A35" }}
           value={factura?.id_factura_venta || ""}
           onChange={(e) =>

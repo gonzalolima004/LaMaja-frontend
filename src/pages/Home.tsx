@@ -17,14 +17,15 @@ export default function Home() {
 
       <Header />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-5xl mx-auto md:p-8">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-[70%] sm:max-w-3xl md:max-w-5xl mx-auto py-3 sm:py-6 md:p-8 overflow-hidden md:mt-5 pt-15">
 
         {/* Historial presupuestos */}
         <Link
           to={restringido ? "#" : "/historial-presupuestos"}
           className={`
-            flex flex-col items-center justify-center rounded-lg p-6 md:p-12
-            min-h-[180px] md:min-h-[220px] border-2 transition-all group
+            flex flex-col items-center justify-center rounded-lg p-4 p-4 sm:p-6 md:p-12
+
+            min-h-[150px] sm:min-h-[170px] md:min-h-[220px] border-2 transition-all group
             ${restringido ? claseDesactivada : claseActivada}
           `}
         >
@@ -32,7 +33,7 @@ export default function Home() {
             className={`w-12 h-12 md:w-16 md:h-16 mb-4 
             ${restringido ? "text-gray-500" : "text-[#345A35] group-hover:text-[#F3EBD8]"}
           `}/>
-          <h2 className="text-xl md:text-2xl font-semibold">Presupuestos</h2>
+          <h2 className="text-lg sm:text-xl md:text-2xl font-semibold">Presupuestos</h2>
         </Link>
 
         {/* Animales */}
@@ -40,7 +41,8 @@ export default function Home() {
           to="/gestion-animales"
           className="
             flex flex-col items-center justify-center bg-[#A1C084] border-2 border-[#345A35]
-            rounded-lg p-6 md:p-12 min-h-[180px] md:min-h-[220px]
+            rounded-lg p-4 sm:p-6 md:p-12
+ min-h-[180px] md:min-h-[220px]
             hover:bg-[#345A35] hover:text-[#F3EBD8] transition-all group
           "
         >
@@ -52,7 +54,8 @@ export default function Home() {
         <Link
           to={restringido ? "#" : "/historial-facturas"}
           className={`
-            flex flex-col items-center justify-center rounded-lg p-6 md:p-12
+            flex flex-col items-center justify-center rounded-lg p-4 sm:p-6 md:p-12
+
             min-h-[180px] md:min-h-[220px] border-2 transition-all group
             ${restringido ? claseDesactivada : claseActivada}
           `}
@@ -68,7 +71,8 @@ export default function Home() {
         <Link
           to={restringido ? "#" : "/historial-cobros"}
           className={`
-            flex flex-col items-center justify-center rounded-lg p-6 md:p-12
+            flex flex-col items-center justify-center rounded-lg p-4 sm:p-6 md:p-12
+
             min-h-[180px] md:min-h-[220px] border-2 transition-all group
             ${restringido ? claseDesactivada : claseActivada}
           `}

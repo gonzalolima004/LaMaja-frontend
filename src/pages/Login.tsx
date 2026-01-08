@@ -65,20 +65,21 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F3EBD8] flex flex-col">
       {/* Header */}
-      <header className="w-full flex items-center px-8 py-4 bg-[#345A35]">
+      <header className="w-full flex items-center px-4 sm:px-8 py-3 sm:py-4 bg-[#345A35]">
         <img
           src="/logo-sin-letras.png"
           alt="Logo La Maja"
-          className="w-20 h-20 rounded-full bg-transparent"
+          className="w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-transparent"
+
         />
-        <h1 className="flex-1 text-center ml-[-70px] text-5xl font-serif font-bold text-[#F3EBD8] tracking-wider">
+        <h1 className="flex-1 text-center ml-0 sm:ml-[-70px] text-3xl sm:text-5xl font-serif font-bold text-[#F3EBD8] tracking-wider">
           LA MAJA
         </h1>
       </header>
 
       {/* Login */}
       <div
-        className="flex-1 flex justify-center items-start pt-10 bg-cover bg-center"
+        className="flex-1 flex justify-center items-start pt-10 sm:pt-16 bg-cover bg-center"
         style={{
           backgroundImage:
             "url('public/vista-frontal-del-paisaje-con-vegetacion-y-cielo-despejado.jpg')",
@@ -86,14 +87,14 @@ const Login: React.FC = () => {
       >
         <form
           onSubmit={handleLogin}
-          className="bg-[#A1C084]/90 backdrop-blur-sm w-full max-w-md rounded-3xl shadow-2xl flex flex-col items-center py-8 px-10 space-y-4"
-        >
+          className="bg-[#A1C084]/90 backdrop-blur-sm  w-[70%] max-w-sm sm:max-w-md  rounded-3xl shadow-2xl  flex flex-col items-center  py-6 sm:py-8 px-4 sm:px-10  space-y-4">
+
           <h2 className="text-3xl font-semibold text-[#F3EBD8] mb-4 italic">Iniciar sesión</h2>
 
           <input
             type="email"
             placeholder="Email:"
-            className="w-full p-4 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/70 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            className="w-full p-3 sm:p-4 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/70 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -101,7 +102,7 @@ const Login: React.FC = () => {
           <input
             type="password"
             placeholder="Contraseña:"
-            className="w-full p-4 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/70 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
+            className="w-full p-3 sm:p-4 rounded-full bg-[#F3EBD8] text-[#345A35] placeholder:text-[#345A35]/70 focus:outline-none focus:ring-2 focus:ring-[#345A35]"
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
           />
@@ -109,7 +110,7 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="cursor-pointer w-3/4 bg-[#F3EBD8] text-[#345A35] rounded-full py-3 mt-4 font-semibold text-lg hover:bg-[#345A35] hover:text-[#F3EBD8] transition-colors disabled:opacity-50"
+            className="cursor-pointer w-3/4 bg-[#F3EBD8] text-[#345A35] rounded-full py-2 sm:py-3 mt-4 font-semibold text-lg hover:bg-[#345A35] hover:text-[#F3EBD8] transition-colors disabled:opacity-50"
           >
             {loading ? "Ingresando..." : "Ingresar"}
           </button>
@@ -119,7 +120,7 @@ const Login: React.FC = () => {
           <button
             type="button"
             onClick={() => setMostrarModal(true)}
-            className="italic cursor-pointer w-3/4 bg-[#345A35] text-[#F3EBD8] hover:text-[#345A35] rounded-full py-3 font-semibold text-lg hover:bg-[#F3EBD8] transition-colors"
+            className="italic cursor-pointer w-3/4 bg-[#345A35] text-[#F3EBD8] hover:text-[#345A35] rounded-full py-2 sm:py-3 font-semibold text-lg hover:bg-[#F3EBD8] transition-colors"
           >
             Olvidé la contraseña
           </button>
@@ -129,7 +130,7 @@ const Login: React.FC = () => {
       {/* Modal de recuperación */}
       {mostrarModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-[#F3EBD8] rounded-2xl shadow-lg p-8 w-96 text-center">
+          <div className="bg-[#F3EBD8] rounded-2xl shadow-lg p-8 w-full max-w-sm px-4 text-center">
             <h2 className="text-2xl font-semibold text-[#345A35] mb-4">
               Recuperar contraseña
             </h2>

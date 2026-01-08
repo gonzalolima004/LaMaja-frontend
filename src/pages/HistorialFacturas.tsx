@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import api from "../services/api";
-import { Trash2, FileText, BookText, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trash2, FileText, ChevronLeft, ChevronRight } from "lucide-react";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
+import HeaderHistorial from "../components/HeaderHistorial";
 import { generarPDFFactura } from "../services/GenerarPDF_Factura";
-import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
@@ -17,7 +17,6 @@ const HistorialFacturas = () => {
   const [paginaActual, setPaginaActual] = useState(1);
   const facturasPorPagina = 5;
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     const obtenerFacturas = async () => {
@@ -63,10 +62,6 @@ const HistorialFacturas = () => {
     });
   };
 
-  const goGenerarFacturas = () => {
-    navigate("/generar-facturas");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   function toLocalDateString(fechaISO: string) {
     return dayjs.utc(fechaISO).format("YYYY-MM-DD");
@@ -99,71 +94,22 @@ const HistorialFacturas = () => {
       <Header />
       <div className="min-h-screen bg-[#F3EBD8] p-3 sm:p-6">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
 
-            {/* HEADER */}
-            <div className="bg-[#345A35] px-4 py-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row justify-between items-center gap-6">
+          <div className="rounded-lg shadow-lg overflow-hidden">
 
-              <h2 className="text-xl sm:text-3xl font-semibold text-white w-full">
-                Historial de facturas
-              </h2>
-
-              <div className="flex items-end gap-4">
-                {(fechaFiltro !== "" || filtroPresupuesto !== "") && (
-                  <button
-                    onClick={() => {
-                      setFechaFiltro("");
-                      setFiltroPresupuesto("");
-                    }}
-                    className="text-white font-semibold px-5 h-[42px] underline cursor-pointer hover:scale-[1.05]"
-                  >
-                    Ver todas
-                  </button>
-                )}
-
-                <div className="flex flex-col">
-                  <label className="text-xs font-semibold text-white mb-1 text-center">
-                    Filtrar por N° de presupuesto
-                  </label>
+          <HeaderHistorial
+  fechaFiltro={fechaFiltro}
+  setFechaFiltro={setFechaFiltro}
+  filtroPresupuesto={filtroPresupuesto}
+  setFiltroPresupuesto={setFiltroPresupuesto}
+/>
 
 
+            
+            {/* TABLA */}
+            <div className="w-full overflow-x-auto ">
+              <table className="hidden md:table min-w-full text-white text-sm sm:text-base table-fixed">
 
-                  <input
-                    type="number"
-                    value={filtroPresupuesto}
-                    onChange={(e) => setFiltroPresupuesto(e.target.value)}
-                    placeholder="Ej: 4"
-                    className="bg-[#A1C084] text-[#345A35] hover:text-white font-semibold px-4 h-[42px]  rounded-lg border border-[#A1C084] shadow-md w-32  hover:bg-[#8fb571] hover:border-white transition w-50"
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="text-xs font-semibold text-white mb-1 text-center">
-                    Filtrar por fecha
-                  </label>
-
-                  <input
-                    type="date"
-                    value={fechaFiltro}
-                    onChange={(e) => setFechaFiltro(e.target.value)}
-                    className="bg-[#A1C084] text-[#345A35] font-semibold pl-5 pr-5 h-[42px] rounded-lg border border-[#A1C084] shadow-md w-48 hover:bg-[#8fb571] hover:border-white hover:text-white transition-all cursor-pointer"
-                  />
-                </div>
-
-                <button
-                  onClick={goGenerarFacturas}
-                  className="cursor-pointer flex items-center gap-2 px-4 h-[42px] bg-[#A1C084] text-[#345A35] rounded-lg border border-[#A1C084] shadow-md font-semibold hover:bg-[#345A35] hover:text-white hover:border-white hover:shadow-lg transition-all active:scale-95 whitespace-nowrap">
-                  <BookText className="w-5 h-5 text-white font-bold" />
-                  <span className="hidden sm:inline text-sm text-white font-bold">
-                    Generar Facturas
-                  </span>
-                </button>
-
-              </div>
-            </div>
-
-            <div className="w-full overflow-x-auto">
-              <table className="min-w-full lg:w-full text-white text-sm sm:text-base table-fixed">
                 <thead className="bg-[#A1C084]">
                   <tr>
                     <th className="px-2 py-2 sm:px-4 sm:py-3 text-center w-16">N°</th>
@@ -279,6 +225,93 @@ const HistorialFacturas = () => {
                 </button>
 
               </div>
+
+              {/* TARJETAS PARA VISTA DE CELULAR*/}
+              <div className="md:hidden flex flex-col gap-3 p-3 bg-[#345A35]">
+                {facturasPaginadas.map((f) => {
+                  const totalPresupuesto = f.presupuesto?.importe_total || 0;
+                  const totalFacturado =
+                    f.presupuesto?.facturas?.reduce(
+                      (acc: number, fac: any) => acc + fac.importe_total,
+                      0
+                    ) || 0;
+
+                  const restante = totalPresupuesto - totalFacturado;
+
+                  return (
+                    <div key={f.id_factura_venta} className="bg-[#A1C084] rounded-lg shadow-md p-4 border-[#345A35]">
+
+                      {/* ENCABEZADO */}
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <span className="text-xs text-white font-medium">Factura</span>
+                          <p className="text-lg font-bold text-white">N°{f.id_factura_venta}</p>
+                        </div>
+                        <span className="bg-[#A1C084] text-white text-xs font-semibold px-2 py-1 rounded">
+                          {dayjs.utc(f.fecha).format("DD/MM/YYYY")}
+                        </span>
+                      </div>
+
+                      {/* PRESUPUESTO */}
+                      <div className="mb-3">
+                        <span className="text-xs text-white font-medium">Presupuesto</span>
+                        <p className="font-semibold text-white">
+                          N°{f.presupuesto?.id_presupuesto} - {f.presupuesto?.cliente?.nombre} {f.presupuesto?.cliente?.apellido}
+                        </p>
+                      </div>
+
+                      {/* IMPORTE TOTAL DEL PRESUPUESTO */}
+                      <div className="mb-2">
+                        <span className="text-xs text-white font-medium">Total del presupuesto</span>
+                        <p className="text-xl font-bold text-white">${totalPresupuesto.toLocaleString("es-AR")}</p>
+                      </div>
+
+                      {/* TOTAL FACTURADO */}
+                      <div className="mb-2">
+                        <span className="text-xs text-white font-medium">Total facturado</span>
+                        <p className="text-lg font-bold text-green-700">${totalFacturado.toLocaleString("es-AR")}</p>
+                      </div>
+
+                      {/* RESTANTE */}
+                      <div className="mb-4">
+                        <span className="text-xs text-white font-medium">Restante por facturar</span>
+                        <p
+                          className={`text-lg font-bold ${restante <= 0 ? "text-green-700" : "text-red-700"}`}
+                        >
+                          ${restante.toLocaleString("es-AR")}
+                        </p>
+                      </div>
+
+                      {/* IMPORTE DE ESTA FACTURA */}
+                      <div className="mb-4">
+                        <span className="text-xs text-white font-medium">Importe de esta factura</span>
+                        <p className="text-xl font-bold text-white">${f.importe_total.toLocaleString("es-AR")}</p>
+                      </div>
+
+                      {/* BOTONES */}
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => generarPDFFactura(f)}
+                          className="flex-1 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-md flex items-center justify-center text-sm font-medium"
+                        >
+                          <FileText className="w-4 h-4 mr-2" />
+                          Descargar PDF
+                        </button>
+
+                        <button
+                          onClick={() => eliminarFactura(f.id_factura_venta)}
+                          className="cursor-pointer text-red-700 bg-red-100 hover:bg-red-200 px-4 py-2.5 rounded-md flex items-center justify-center"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+
+
             </div>
 
           </div>

@@ -18,14 +18,14 @@ export default function ListaAnimales({
   }, [busqueda, animales])
 
   return (
-    <div className="lg:col-span-2 ml-15 mr-15">
+    <div className="lg:col-span-2 mx-auto w-[95%] sm:w-full">
 
-      <h2 className="text-2xl font-bold mb-6 p-3 bg-[#345A35] rounded-t-2xl text-white text-center">
+      <h2 className="text-xl sm:text-2xl font-bold mb-6 p-3 bg-[#345A35] rounded-t-2xl text-white text-center">
         Animales Disponibles
       </h2>
 
       {/* PRECIO + BUSCADOR */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
+      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-8 border border-gray-100">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {/* PRECIO POR KG */}
@@ -41,7 +41,7 @@ export default function ListaAnimales({
                 type="number"
                 value={precioPorKg}
                 onChange={(e) => setPrecioPorKg(e.target.value)}
-                className="border-2 border-gray-200 focus:border-[#A1C084] focus:ring-2 focus:ring-[#A1C084]/30 rounded-xl pl-8 pr-4 py-3 w-full font-semibold text-lg"
+                className="border-2 border-gray-200 focus:border-[#A1C084] focus:ring-2 focus:ring-[#A1C084]/30 rounded-xl pl-8 pr-4 py-2.5 w-full font-semibold text-base sm:text-lg"
               />
             </div>
           </div>
@@ -70,7 +70,7 @@ export default function ListaAnimales({
       </div>
 
       {/* LISTA DE ANIMALES */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid sm:grid-cols-2 gap-6">
         {animalesFiltrados.length === 0 ? (
           <p className="text-gray-500 italic col-span-full text-center">
             No se encontraron animales con esa caravana.
@@ -84,7 +84,7 @@ export default function ListaAnimales({
             return (
               <div
                 key={animal.id_animal}
-                className={`group relative bg-white rounded-xl p-5 transition-all duration-300 ${
+                className={`group relative bg-white rounded-xl p-4 transition-all duration-300 ${
                   seleccionado
                     ? "ring-2 ring-[#A1C084] shadow-lg shadow-[#A1C084]/20"
                     : "shadow-md hover:shadow-xl hover:-translate-y-1"

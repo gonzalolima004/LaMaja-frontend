@@ -67,8 +67,8 @@ export default function ProcedimientosModal(props: any) {
 
     return (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-xl w-[500px]">
-                <h2 className="text-2xl font-semibold text-[#345A35] mb-4">
+            <div className="bg-white p-4 sm:p-6 rounded-xl w-[90%] max-w-md max-h-[90vh] overflow-y-auto">
+                <h2 className="text-xl sm:text-2xl font-semibold text-[#345A35] mb-4">
                     Procedimientos para caravana N°{animal.id_animal}
                 </h2>
 
@@ -87,16 +87,16 @@ export default function ProcedimientosModal(props: any) {
                 />
 
                 <button
-  onClick={guardar}
-  className="bg-[#345A35] text-white px-4 py-2 rounded w-full mt-3 cursor-pointer font-semibold transition hover:bg-[#2a4a2b] hover:scale-[1.02]"
->
-  Guardar
-</button>
+                    onClick={guardar}
+                    className="bg-[#345A35] text-white px-4 py-2 rounded w-full mt-3 cursor-pointer font-semibold transition hover:bg-[#2a4a2b] hover:scale-[1.02]"
+                >
+                    Guardar
+                </button>
 
 
                 <h3 className="text-lg font-semibold mt-5 mb-2">Historial</h3>
 
-                <ul className="max-h-40 overflow-y-autop-2 text-sm space-y-2">
+                <ul className="max-h-40 overflow-y-auto p-2 text-sm space-y-2">
                     {procedimientos.map((p) => (
                         <li
                             key={p.id_procedimiento_veterinario}
@@ -105,7 +105,7 @@ export default function ProcedimientosModal(props: any) {
                             <span>
                                 {dayjs.utc(p.fecha).format("DD/MM/YYYY")}
                             </span>
-                             <span className="text-gray-700">{p.tipo}</span>
+                            <span className="text-gray-700">{p.tipo}</span>
 
                             <button
                                 onClick={() => eliminarProcedimiento(p.id_procedimiento_veterinario)}

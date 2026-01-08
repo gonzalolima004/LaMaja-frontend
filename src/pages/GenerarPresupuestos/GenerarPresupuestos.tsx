@@ -92,7 +92,8 @@ export default function GenerarPresupuestos() {
     <>
       <Header />
 
-      <div className="min-h-screen bg-[#F3EBD8] p-6 md:p-8 max-w-8xl mx-auto">
+      <div className="min-h-screen bg-[#F3EBD8] p-4 sm:p-6 md:p-8 w-full max-w-8xl mx-auto">
+
 
         <h1 className="text-3xl text-center font-bold bg-gradient-to-r from-[#345A35] to-[#2a4a2b] bg-clip-text text-transparent mb-5">
           Generar Presupuestos

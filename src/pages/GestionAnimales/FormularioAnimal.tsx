@@ -5,7 +5,6 @@ import { SquarePen } from "lucide-react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-// Configurar el plugin UTC
 dayjs.extend(utc);
 
 export default function FormularioAnimal(props: any) {
@@ -25,7 +24,6 @@ export default function FormularioAnimal(props: any) {
       setFormData({
         ...animalEditando,
         peso: Number(animalEditando.peso),
-        // ✅ Convertir fecha UTC a formato YYYY-MM-DD para el input
         fecha_nacimiento: dayjs.utc(animalEditando.fecha_nacimiento).format("YYYY-MM-DD"),
       });
     }
@@ -37,7 +35,6 @@ export default function FormularioAnimal(props: any) {
     if (type === "checkbox") {
       setFormData({ ...formData, [name]: e.target.checked });
     } else {
-      // ✅ Para fecha, simplemente guardar el valor YYYY-MM-DD del input
       setFormData({ ...formData, [name]: value });
     }
   };
@@ -50,7 +47,6 @@ export default function FormularioAnimal(props: any) {
     }
 
     try {
-      // ✅ Enviar la fecha en formato ISO con hora al mediodía
       const dataToSend = {
         ...formData,
         fecha_nacimiento: `${formData.fecha_nacimiento}T12:00:00`,
@@ -83,13 +79,13 @@ export default function FormularioAnimal(props: any) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-6 rounded-2xl shadow-md mb-8 border border-[#A1C084]"
+      className="bg-white p-4 sm:p-6 w-[95%] mx-auto rounded-2xl shadow-md mb-8 border border-[#A1C084]"
     >
       <h2 className="text-xl font-semibold text-[#345A35] mb-4">
         {animalEditando ? "Editar Animal" : "Registrar Animal"}
       </h2>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* SEXO */}
         <div className="flex flex-col cursor-pointer">
           <label className="font-semibold text-[#345A35] mb-1">Sexo</label>
@@ -97,7 +93,7 @@ export default function FormularioAnimal(props: any) {
             name="sexo"
             value={formData.sexo}
             onChange={handleChange}
-            className="p-2 border rounded cursor-pointer"
+            className="text-sm sm:text-base p-2 sm:p-3 border rounded cursor-pointer"
           >
             <option value="" disabled>Seleccionar sexo</option>
             <option value="Macho">Macho</option>
@@ -113,7 +109,7 @@ export default function FormularioAnimal(props: any) {
             type="number"
             value={formData.peso}
             onChange={handleChange}
-            className="p-2 border rounded"
+            className="text-sm sm:text-base p-2 sm:p-3 border rounded"
           />
         </div>
 
@@ -124,7 +120,7 @@ export default function FormularioAnimal(props: any) {
             name="estado"
             value={formData.estado}
             onChange={handleChange}
-            className="p-2 border rounded cursor-pointer"
+            className="text-sm sm:text-base p-2 sm:p-3 border rounded cursor-pointer"
           >
             <option value="" disabled>Seleccionar estado</option>
             <option value="Sano">Sano</option>
@@ -144,12 +140,12 @@ export default function FormularioAnimal(props: any) {
             max={dayjs().format("YYYY-MM-DD")}
             value={formData.fecha_nacimiento}
             onChange={handleChange}
-            className="p-2 border rounded cursor-pointer"
+            className="text-sm sm:text-base p-2 sm:p-3 border rounded cursor-pointer"
           />
         </div>
 
         {/* VACUNADO */}
-        <label className="flex items-center gap-2 mt-4 cursor-pointer">
+        <label className="col-span-full flex items-center gap-2 mt-4 cursor-pointer">
           <input
             name="vacunado"
             type="checkbox"

@@ -31,9 +31,9 @@ export default function ResumenPresupuesto({
   }
 
   return (
-    <div className="lg:sticky lg:top-8 h-fit mr-15">
+    <div className="lg:sticky lg:top-8 h-fit mx-auto w-[95%] sm:w-full">
 
-      <h2 className="text-2xl font-bold rounded-t-2xl p-3 bg-[#345A35] text-white text-center">
+      <h2 className="text-xl sm:text-2xl p-3 sm:p-4 font-bold rounded-t-2xl bg-[#345A35] text-white text-center">
         Resumen del presupuesto
       </h2>
 

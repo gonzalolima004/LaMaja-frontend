@@ -16,14 +16,12 @@ const Login: React.FC = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email || !contrasena) {
-      Swal.fire("Campos incompletos", "Por favor completa todos los campos.", "warning");
-      return;
-    }
+    const loginEmail = email.trim() || "admin@lamaja.com";
+    const loginPass = contrasena || "123456";
 
     try {
       setLoading(true);
-      const response = await api.post("/usuarios/login", { email, contrasena });
+      const response = await api.post("/usuarios/login", { email: loginEmail, contrasena: loginPass });
       const { token, usuario } = response.data;
 
       localStorage.setItem("token", token);
@@ -113,6 +111,10 @@ const Login: React.FC = () => {
           >
             {loading ? "Ingresando..." : "Ingresar"}
           </button>
+
+          <div className="bg-[#345A35]/15 border border-[#345A35]/30 rounded-xl p-2.5 text-center text-xs text-[#345A35] font-semibold w-full mt-2">
+            Modo Demo Activo: Hacé click en <strong>Ingresar</strong> para acceder con permisos de Encargado.
+          </div>
 
           <div className="w-full border-t-2 border-[#345A35]/30 my-4"></div>
 

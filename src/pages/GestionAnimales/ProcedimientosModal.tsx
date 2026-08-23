@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../services/api";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Trash2 } from "lucide-react";
@@ -17,7 +17,7 @@ export default function ProcedimientosModal(props: any) {
 
 
     const cargar = async () => {
-        const res = await axios.get("http://localhost:3001/api/procedimientos");
+        const res = await api.get("/procedimientos");
         setProcedimientos(res.data.filter((p: any) => p.id_animal === animal.id_animal));
     };
 
@@ -34,7 +34,7 @@ export default function ProcedimientosModal(props: any) {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`http://localhost:3001/api/procedimientos/${id}`);
+                    await api.delete(`/procedimientos/${id}`);
                     cargar(); // recargar la lista
                     Swal.fire("Eliminado", "El procedimiento fue eliminado.", "success");
                 } catch {
@@ -54,7 +54,7 @@ export default function ProcedimientosModal(props: any) {
             return Swal.fire("Error", "Faltan datos", "warning");
         }
 
-        await axios.post("http://localhost:3001/api/procedimientos", {
+        await api.post("/procedimientos", {
             tipo,
             fecha,
             id_animal: animal.id_animal,

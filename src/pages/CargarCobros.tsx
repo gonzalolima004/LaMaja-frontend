@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
 
@@ -28,8 +28,8 @@ export default function CargarCobros() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const facturasRes = await axios.get("http://localhost:3001/api/facturas_venta");
-      const cobrosRes = await axios.get("http://localhost:3001/api/cobros");
+      const facturasRes = await api.get("/facturas_venta");
+      const cobrosRes = await api.get("/cobros");
 
       setFacturas(facturasRes.data);
       setCobros(cobrosRes.data);
@@ -45,7 +45,7 @@ export default function CargarCobros() {
       return Swal.fire("Faltan datos", "Selecciona método de pago", "warning");
 
     try {
-      const res = await axios.post("http://localhost:3001/api/cobros", {
+      const res = await api.post("/cobros", {
         id_factura_venta: factura.id_factura_venta,
         id_metodo_pago: metodo,
         importe_total: factura.importe_total,
@@ -58,7 +58,7 @@ export default function CargarCobros() {
       setMetodo(null);
       setTitular("");
 
-      const updatedCobros = await axios.get("http://localhost:3001/api/cobros");
+      const updatedCobros = await api.get("/cobros");
       setCobros(updatedCobros.data);
     } catch {
       Swal.fire("Error", "No se pudo registrar el cobro", "error");

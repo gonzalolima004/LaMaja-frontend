@@ -8,7 +8,7 @@
 
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../services/api";
 import Swal from "sweetalert2";
 
 import Header from "../../components/Header";
@@ -25,7 +25,7 @@ export default function GestionAnimales() {
 
     const cargarAnimales = async () => {
         try {
-            const res = await axios.get("http://localhost:3001/api/animales");
+            const res = await api.get("/animales");
             setAnimales(res.data);
             setModoBusqueda(false);
             setAnimalEditando(null);
@@ -42,7 +42,7 @@ export default function GestionAnimales() {
             showCancelButton: true,
         }).then(async (r) => {
             if (r.isConfirmed) {
-                await axios.delete(`http://localhost:3001/api/animales/${id}`);
+                await api.delete(`/animales/${id}`);
                 cargarAnimales();
             }
         });
@@ -54,7 +54,7 @@ export default function GestionAnimales() {
         const id = Number(busquedaId);
 
         try {
-            const res = await axios.get(`http://localhost:3001/api/animales/${id}`);
+            const res = await api.get(`/animales/${id}`);
             if (res.data?.animal) {
     setAnimales([res.data.animal]);
     setModoBusqueda(true);

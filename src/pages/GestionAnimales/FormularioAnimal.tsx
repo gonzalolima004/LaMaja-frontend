@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../services/api";
 import Swal from "sweetalert2";
 import { SquarePen } from "lucide-react";
 import dayjs from "dayjs";
@@ -57,13 +57,13 @@ export default function FormularioAnimal(props: any) {
       };
 
       if (animalEditando) {
-        await axios.put(
-          `http://localhost:3001/api/animales/${animalEditando.id_animal}`,
+        await api.put(
+          `/animales/${animalEditando.id_animal}`,
           dataToSend
         );
         Swal.fire("Actualizado", "Animal actualizado", "success");
       } else {
-        await axios.post("http://localhost:3001/api/animales", dataToSend);
+        await api.post("/animales", dataToSend);
         Swal.fire("Registrado", "Animal registrado", "success");
       }
 
